@@ -57,8 +57,8 @@ test("getOutputLog", async () => {
     const apiCall = await cloudComputingAPI.getOutput(kernel)
     expect(apiCall.getLog()[0]).toEqual({
         data: "WARNING: Skipping typing as it is not installed.\n",
-        "stream_name": "stderr",
-        "time": 3.389979886,
+        stream_name: "stderr",
+        time: 3.389979886,
     })
 })
 
@@ -87,7 +87,7 @@ test("getStatus", async () => {
         name: "test",
         type: CloudComputingKernelType.analysis,
         sheetColumn: 5,
-        sheetIdHash: "22cd60"
+        sheetIdHash: "22cd60",
     }
     const apiCall = await cloudComputingAPI.getStatus(kernel)
     expect(apiCall.getStatus()).toEqual("complete")

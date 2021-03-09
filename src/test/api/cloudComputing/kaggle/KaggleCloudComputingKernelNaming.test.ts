@@ -33,12 +33,16 @@ test("getKernelDash", () => {
 })
 
 test("isMatchingNamingFalseType", () => {
-    const isMatch: boolean = KaggleCloudComputingKernelNaming.isMatchingNaming("adapterhubuser/ah-first-program-3-fffaaa")
+    const isMatch: boolean = KaggleCloudComputingKernelNaming.isMatchingNaming(
+        "adapterhubuser/ah-first-program-3-fffaaa"
+    )
     expect(isMatch).toBeFalsy()
 })
 
 test("isMatchingNamingFalsePrefix", () => {
-    const isMatch: boolean = KaggleCloudComputingKernelNaming.isMatchingNaming("adapterhubuser/first-program-t-3-fffaaa")
+    const isMatch: boolean = KaggleCloudComputingKernelNaming.isMatchingNaming(
+        "adapterhubuser/first-program-t-3-fffaaa"
+    )
     expect(isMatch).toBeFalsy()
 })
 
