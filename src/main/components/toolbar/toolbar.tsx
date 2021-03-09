@@ -8,9 +8,9 @@ export default function Toolbar() {
         <div>
             <nav className="navbar navbar-expand-md navbar-light bg-light">
                 <div className="container">
-                    <a className="navbar-brand p-0" href="/">
+                    <a className="navbar-brand p-0">
                         <img
-                            src="/images/adapter-bert.png"
+                            src="images/adapter-bert.png"
                             className="bert"
                             width="28"
                             style={{ marginRight: "15px" }}
