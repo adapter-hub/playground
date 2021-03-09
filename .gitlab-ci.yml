@@ -1,0 +1,12 @@
+default:
+    image: node
+
+stages:
+    - main
+
+main:
+    stage: main
+    script:
+        - npm install
+        - npm run check
+        - npm run test
