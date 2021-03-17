@@ -33,7 +33,6 @@ module.exports = {
     },
     devServer: {
         contentBase: 'dist/',
-        historyApiFallback: true,
-        http2: true
+        historyApiFallback: true
     }
 }

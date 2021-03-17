@@ -51,7 +51,7 @@ export default function Toolbar({ logout }: { logout?: () => void }) {
                                 size="sm"
                                 variant="outline-light"
                                 as="a"
-                                href="https://youtu.be/B1n1SbQkNsA"
+                                href="https://youtu.be/pnNwPqyGfX0"
                                 target="_blank">
                                 Tutorial <i className="fab fa-youtube fa-lg"></i>&nbsp;
                             </Button>
