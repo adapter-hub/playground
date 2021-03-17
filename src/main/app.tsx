@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react"
-import Toolbar from "./components/toolbar/toolbar"
+import Toolbar, { ToolbarWithLogout } from "./components/toolbar/toolbar"
 import Footer from "./components/footer/footer"
 import MainPanel from "./components/main-panel/main-panel"
 import { Inputzone } from "./components/inputzone/inputzone"
@@ -173,6 +173,7 @@ export function CredentialsWrapper({ children }: PropsWithChildren<any>) {
                         <Faqpage />
                     </Route>
                     <Route path="">
+                        <Toolbar />
                         <Inputzone
                             onKaggleCredentials={(credentials, rememberMe) => {
                                 saveKaggleCredentials(credentials, rememberMe)
@@ -203,13 +204,13 @@ export function App() {
                             path={"/projects/:name/:sheetIdHash"}
                             render={(props) => (
                                 <div>
-                                    <Toolbar />
+                                    <ToolbarWithLogout />
                                     <MainPanel {...props} />
                                 </div>
                             )}></Route>
                         <Route path="/projects">
                             <div>
-                                <Toolbar />
+                                <ToolbarWithLogout />
                                 <ProjectList />
                             </div>
                         </Route>

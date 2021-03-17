@@ -1,13 +1,7 @@
-import React, { useCallback, useMemo, useState } from "react"
-import { Accordion, Button, Card, Col, Collapse, Container, Fade, Form, Row } from "react-bootstrap"
-import { useDropzone } from "react-dropzone"
+import React, { useState } from "react"
+import { Col, Collapse, Container, Row } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
-import styled from "styled-components"
-import { CloudComputingAPI } from "../../api/cloudComputing/CloudComputingAPI"
-import { KaggleCloudComputingAPI } from "../../api/cloudComputing/kaggle/KaggleCloudComputingAPI"
-import { Notificationstates, notify } from "../../app"
 import { toAbsoluteStaticFilePath } from "../../toolbox"
-import Footer from "../footer/footer"
 import Toolbar from "../toolbar/toolbar"
 
 export type QuestionAnswer = {
@@ -29,9 +23,20 @@ const DataQandA: QuestionAnswer[] = [
             "Processing several hundred thousand text inputs via the adapterhub library can quickly overwhelm the computing power of a standard web server. To prevent any form of performance degradation, we decided to move all of the calculation to kaggle, where users can compute on their very own workbench. Creating your own kaggle account allows you to store and maintain your projects by yourself, independent of other users that use our site.",
     },
     {
+        question: "How to format the 'date' field?",
+        answerTop:
+            "We accept the most common format like ISO. You can use Google sheets to format your dates. Just follow the steps in the following picture.",
+        imagLink: toAbsoluteStaticFilePath("images/formatDateSheets.png"),
+    },
+    {
+        question: "Some computations are loading endlessly. What to do?",
+        answerTop:
+            "If to many requests where issued to kaggle, kaggle will deny requests for a certain time window. Try reloading the page or close the page and wait a short time so kaggle stops blocking your requests.",
+    },
+    {
         question: "How do I train Adapters?",
         answerTop:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+            "When adding a task to a project you can select 'training' as task type. Training requires the 'gold_label' column to be filled with correct labels (e.g. 'positive'/'negative' for sentiment analysis).",
     },
     {
         question: "How do I need to format my google sheet for sentiment analysis?",
@@ -43,112 +48,18 @@ const DataQandA: QuestionAnswer[] = [
 ]
 
 export function Faqpage() {
-    const [toggleArray, setToggleArray] = useState<boolean[]>(
-        Array.from(
-            DataQandA.map(() => {
-                return false
-            })
-        )
-    )
-    const history = useHistory()
-
-    const Header = () => (
-        <div
-            className="jumbotron jumbotron-fluid py-lg-5 d-flex "
-            style={{
-                height: "132px",
-                width: "100%",
-                backgroundColor: "#39B3C6",
-                color: "#f0f2f5",
-                textAlign: "center",
-                lineHeight: "1.5",
-            }}>
-            <Row style={{ width: "100%" }}>
-                <Col sm={8} style={{ marginLeft: "10%", fontWeight: 500, fontSize: "3rem" }}>
-                    Frequently Asked Questions
-                </Col>
-                <Col sm={2} onClick={() => history.push(`/`)} className="faq-home">
-                    <img src={toAbsoluteStaticFilePath("images/adapter-bert.png")} className="bert" width="45" />
-                    Home
-                </Col>
-            </Row>
-        </div>
-    )
-
-    function QuestionAnswer({
-        headerText,
-        bodyText,
-        indx,
-        image,
-        answerBottom,
-    }: {
-        headerText: string
-        bodyText: string
-        indx: number
-        image?: string
-        answerBottom?: string
-    }) {
-        return (
-            <div>
-                <Row>
-                    <Col>
-                        <div>
-                            <div
-                                className="faq-header d-flex flex-row align-items-center justify-content-between"
-                                onClick={() =>
-                                    setToggleArray(
-                                        Array.from(
-                                            toggleArray.map((element, index) => {
-                                                return index == indx ? !element : element
-                                            })
-                                        )
-                                    )
-                                }
-                                style={{
-                                    alignContent: "center",
-                                    borderBottom: "2px solid #424c69",
-                                }}>
-                                <div>{headerText}</div>
-                                <div>
-                                    {toggleArray[indx] ? (
-                                        <i className="faq-icon fas fa-arrow-circle-up fa-lg"></i>
-                                    ) : (
-                                        <i className="faq-icon fas fa-arrow-circle-down fa-lg"></i>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="row mt-3" />
-                            <Collapse in={toggleArray[indx]} appear={true}>
-                                <div>
-                                    <div>{bodyText}</div>
-                                    <div className="row mt-3" />
-                                    {image ? (
-                                        <div className="row d-flex justify-content-center">
-                                            <img className="mr-3" style={{ border: "1px dotted black" }} src={image} />
-                                        </div>
-                                    ) : (
-                                        <div />
-                                    )}
-                                    {answerBottom ? <div className="row mt-5"> {answerBottom}</div> : <div />}
-                                </div>
-                            </Collapse>
-                        </div>
-                    </Col>
-                </Row>
-                <div className="row mt-5"></div>
-            </div>
-        )
-    }
-
     return (
         <div>
-            <Header />
+            <Toolbar />
+            <div className="jumbotron jumbotron-fluid d-flex align-items-center bg-primary justify-content-center p-4">
+                <h2 className="text-white">Frequently Asked Questions</h2>
+            </div>
             <Container>
                 <h3 className="mb-5" style={{ color: "#3096a6" }}>
-                    To get some basic information about our project, please watch the following video:{" "}
+                    Adapter Hub Playground Introduction
                     <i className="fas fa-info-circle" style={{ fontSize: "0.7em", marginLeft: "8px" }}></i>
                 </h3>
-                <div className="row d-flex justify-content-center">
+                <div className="row d-flex justify-content-center mb-5">
                     <div className="col-sm-8">
                         <div className="embed-responsive embed-responsive-16by9">
                             <iframe
@@ -159,23 +70,84 @@ export function Faqpage() {
                         </div>
                     </div>
                 </div>
-                <div className="row mt-5"></div>
-                <div className="row mt-5"></div>
-                <div className="row mt-5"></div>
 
                 {DataQandA.map((questionAnswer, index) => {
                     return (
                         <QuestionAnswer
                             headerText={questionAnswer.question}
                             bodyText={questionAnswer.answerTop}
-                            indx={index}
                             image={questionAnswer.imagLink}
                             key={index}
                             answerBottom={questionAnswer.answerBottom}
                         />
                     )
                 })}
+                <h5>
+                    If you encounter some errors or need additional help please use write create a Issue at{" "}
+                    <a href="https://github.com/Adapter-Hub/playground">the github repo.</a>
+                </h5>
             </Container>
+            <div className="row mt-5"></div>
+        </div>
+    )
+}
+
+function QuestionAnswer({
+    headerText,
+    bodyText,
+    image,
+    answerBottom,
+}: {
+    headerText: string
+    bodyText: string
+    image?: string
+    answerBottom?: string
+}) {
+    const [open, setOpen] = useState(false)
+    return (
+        <div>
+            <Row>
+                <Col>
+                    <div>
+                        <div
+                            className="faq-header d-flex flex-row align-items-center justify-content-between"
+                            onClick={() => setOpen(!open)}
+                            style={{
+                                alignContent: "center",
+                                borderBottom: "2px solid #424c69",
+                            }}>
+                            <div>{headerText}</div>
+                            <div>
+                                <i
+                                    className={
+                                        open
+                                            ? "faq-icon fas fa-arrow-circle-up fa-lg"
+                                            : "faq-icon fas fa-arrow-circle-down fa-lg"
+                                    }></i>
+                            </div>
+                        </div>
+                        <div className="row mt-3" />
+                        <Collapse in={open} appear={true}>
+                            <div>
+                                <div>{bodyText}</div>
+                                <div className="row mt-3" />
+                                {image ? (
+                                    <div className="row d-flex justify-content-center">
+                                        <img
+                                            className="mr-3"
+                                            style={{ maxWidth: "90%", border: "1px dotted black" }}
+                                            src={image}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div />
+                                )}
+                                {answerBottom ? <div className="row mt-5"> {answerBottom}</div> : <div />}
+                            </div>
+                        </Collapse>
+                    </div>
+                </Col>
+            </Row>
             <div className="row mt-5"></div>
         </div>
     )

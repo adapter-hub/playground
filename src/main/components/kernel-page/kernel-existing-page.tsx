@@ -164,7 +164,6 @@ export function KernelExisitingPage({
                                 )}
                             </div>
                         )}
-                        <button className="btn btn-sm mt-3 btn-outline-primary disabled">View Logs</button>
                     </div>
                 )
         }

@@ -105,7 +105,7 @@ export function Inputzone({
                 lineHeight: "1.5",
             }}>
             <h2 style={{ marginLeft: "20%", fontWeight: 400, fontSize: "2.25rem" }}>
-                Welcome to our Adapterhub Playground!
+                Welcome the Adapterhub Playground!
             </h2>
         </div>
     )
@@ -118,7 +118,7 @@ export function Inputzone({
                     "-sans-serif: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
             }}>
             <Header />
-            <h2 style={{ textAlign: "center", color: "#3096a6" }}>Already know how this works? Sign in here:</h2>
+            <h2 style={{ textAlign: "center", color: "#3096a6" }}>Upload kaggle.json to Sign In</h2>
             <div className="container">
                 <Row className="mt-3">
                     <Col className="d-flex justify-content-center">
@@ -163,7 +163,7 @@ export function Inputzone({
                 </h3>
                 <div className="video_wrapper w-100">
                     <iframe
-                        src="https://www.youtube.com/embed/B1n1SbQkNsA"
+                        src="https://www.youtube.com/embed/pnNwPqyGfX0"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen></iframe>

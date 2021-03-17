@@ -1,11 +1,15 @@
-import React, { Component, useContext, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { CredentialsContext } from "../../app"
 import { toAbsoluteStaticFilePath } from "../../toolbox"
 
-export default function Toolbar() {
+export function ToolbarWithLogout() {
     const { logout } = useContext(CredentialsContext)
+    return <Toolbar logout={logout} />
+}
+
+export default function Toolbar({ logout }: { logout?: () => void }) {
     const [open, setOpen] = useState(false)
     return (
         <div>
@@ -68,9 +72,11 @@ export default function Toolbar() {
                                 </a>
                             </li>
                             <li className="nav-item separator d-md-inline-block"></li>
-                            <Button variant="danger" onClick={logout}>
-                                Logout
-                            </Button>
+                            {logout && (
+                                <Button variant="danger" onClick={logout}>
+                                    Logout
+                                </Button>
+                            )}
                         </ul>
                     </div>
                 </div>
