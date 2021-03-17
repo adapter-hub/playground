@@ -21,7 +21,9 @@ invalid_inputs_row_index += list(map(lambda x:x+2, range(len(user_input_data_1),
         : `user_input_data_1[index]`
 
     return `
-# here we sort out all inputs which are invalid (meaning that ${twoInput ? `one of the two inputs is empty` : `it´s empty`})
+# here we sort out all inputs which are invalid (meaning that ${
+        twoInput ? `one of the two inputs is empty` : `it´s empty`
+    })
 # we do this in order to know what to classify and which rows to skip when writing back the results
 invalid_inputs_row_index = []
 valid_inputs_list_indexes = []

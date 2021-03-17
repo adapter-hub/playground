@@ -11,7 +11,7 @@ const dateParser = new DateParser()
 export function prepareData(nameOfRows: Array<string>, rows: Array<Row>) {
     let lowestdate: Date | null = null
     let highestdate: Date | null = null
-    let numberOfTypesCounter: number = 0
+    let numberOfTypesCounter = 0
 
     const allTypes = new Map<string, Array<string | Date>>()
 
@@ -33,9 +33,9 @@ export function prepareData(nameOfRows: Array<string>, rows: Array<Row>) {
                                 allTypes.get(nameOfColumn)?.push(typeAtColumn)
                             }
                         } else {
-                            let listOfAllLabelNames = null
-                            let listGroupBy = null
-                            let allTypes = null
+                            const listOfAllLabelNames = null
+                            const listGroupBy = null
+                            const allTypes = null
                             return {
                                 listOfAllLabelNames,
                                 listGroupBy,

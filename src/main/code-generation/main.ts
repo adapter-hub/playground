@@ -10,28 +10,28 @@ export function generateCode(
         sheetsAccessToken: string
         sheetsDocumentURL: string
     } & (
-            | {
-                doTraining: false
-                sheetsColumnName: string
-                newNameOfResultColumn: string
-            }
-            | {
-                doTraining: true
-                learningRate: number
-                numTrainEpochs: number
-            }
-        ) &
+        | {
+              doTraining: false
+              sheetsColumnName: string
+              newNameOfResultColumn: string
+          }
+        | {
+              doTraining: true
+              learningRate: number
+              numTrainEpochs: number
+          }
+    ) &
         (
             | {
-                useOwnAdapter: false
-                adapterArchitecture: string
-                adapterGroupName: string
-                nlpTaskType: string
-            }
+                  useOwnAdapter: false
+                  adapterArchitecture: string
+                  adapterGroupName: string
+                  nlpTaskType: string
+              }
             | {
-                useOwnAdapter: true
-                zipFileName: string
-            }
+                  useOwnAdapter: true
+                  zipFileName: string
+              }
         )
 ): string {
     const inputType = utils.getInputType(parameter.taskType, parameter.trainingDataset)

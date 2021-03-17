@@ -40,7 +40,7 @@ const textClassificationPipelineList: string[] = [
     "nli/cb",
     "nli/super_glue_cb",
     "nli/qnli",
-    "nli/rte"
+    "nli/rte",
 ]
 
 //the function to find out the pipeline to use

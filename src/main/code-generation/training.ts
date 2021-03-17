@@ -59,7 +59,9 @@ for i in range(0, length_of_training_data, size_per_iteration):
 
     # encode trainings data
     labeled_texts_for_this_iteration = labeled_texts[i:training_range_end]
-    train_encodings = tokenizer(${twoInput ? twoInputForTokenizer : oneInputForTokenizer}, truncation=True, padding=True)
+    train_encodings = tokenizer(${
+        twoInput ? twoInputForTokenizer : oneInputForTokenizer
+    }, truncation=True, padding=True)
     train_dataset = UserDataset(train_encodings, training_labels[i:training_range_end])
     
     # set parameters of the trainer class

@@ -1,1 +1,1 @@
-export interface CloudComputingFile {}
+export type CloudComputingFile = string
