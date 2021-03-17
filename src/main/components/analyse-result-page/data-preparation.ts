@@ -33,13 +33,10 @@ export function prepareData(nameOfRows: Array<string>, rows: Array<Row>) {
                                 allTypes.get(nameOfColumn)?.push(typeAtColumn)
                             }
                         } else {
-                            const listOfAllLabelNames = null
-                            const listGroupBy = null
-                            const allTypes = null
                             return {
-                                listOfAllLabelNames,
-                                listGroupBy,
-                                allTypes,
+                                listOfAllLabelNames: null,
+                                listGroupBy: null,
+                                allTypes: null,
                             }
                         }
                     }
@@ -58,6 +55,12 @@ export function prepareData(nameOfRows: Array<string>, rows: Array<Row>) {
                             : highestdate < DateInLine
                             ? (highestdate = DateInLine)
                             : null
+                    } else {
+                        return {
+                            listOfAllLabelNames: null,
+                            listGroupBy: null,
+                            allTypes: null,
+                        }
                     }
                 }
                 //idee wäre hier noch, eine else if für intervalle einzubauen. sprich der user merkt in google docs an, dass eine spalte
@@ -86,7 +89,7 @@ export function prepareData(nameOfRows: Array<string>, rows: Array<Row>) {
         .map(([nameOfColumn, typesAtColumn]) => typesAtColumn.map((typeAtColumn) => nameOfColumn + "_" + typeAtColumn))
         .reduce((v1, v2) => v1.concat(v2), [])
 
-    if (highestdate != null && lowestdate != null && highestdate != lowestdate) {
+    if (highestdate != null && lowestdate != null) {
         allTypes.set("dates_year", [lowestdate, highestdate])
         allTypes.set("dates_month", [lowestdate, highestdate])
         allTypes.set("dates_day", [lowestdate, highestdate])

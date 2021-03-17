@@ -66,7 +66,9 @@ export function RenderVisualization({ response, loading }: { response: string[][
                 ) : allTypes == null || listOfAllLabelNames == null || listGroupBy == null ? (
                     <div className="p-2">
                         <div className="d-flex justify-content-xl-start p-2" style={{ fontSize: "1.3rem" }}>
-                            Could not process your google sheet. Make sure it is formatted correctly.
+                            Could not process your google sheet, so please make sure it is formatted correctly. Often
+                            the timestamps are wrongly formatted (note that we support 06/24/2016 but not
+                            24/06/2016).Check the faq page for more help.
                         </div>
                         <div className="d-flex justify-content-xl-start p-2">
                             <button
