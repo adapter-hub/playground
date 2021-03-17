@@ -11,7 +11,7 @@ export default function Toolbar() {
                 <div className="container">
                     <a className="navbar-brand p-0" href="/">
                         <img
-                            src="/images/adapter-bert.png"
+                            src="images/adapter-bert.png"
                             className="bert"
                             width="28"
                             style={{ marginRight: "15px" }}
