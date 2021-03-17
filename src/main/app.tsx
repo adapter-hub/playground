@@ -10,7 +10,7 @@ import "./custom.scss"
 import { ToastContainer, toast, ToastOptions } from "react-toastify"
 import "react-toastify/scss/main.scss"
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Switch,
     Route,
     Redirect,

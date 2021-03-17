@@ -1,5 +1,6 @@
 import React, { Component, useContext, useState } from "react"
 import { Button } from "react-bootstrap"
+import { Link } from "react-router-dom"
 import { CredentialsContext } from "../../app"
 import { toAbsoluteStaticFilePath } from "../../toolbox"
 
@@ -10,7 +11,7 @@ export default function Toolbar() {
         <div>
             <nav className="navbar navbar-expand-md navbar-light bg-light">
                 <div className="container">
-                    <a className="navbar-brand p-0" href={toAbsoluteStaticFilePath("/")}>
+                    <Link className="navbar-brand p-0" to="/">
                         <img
                             src={toAbsoluteStaticFilePath("images/adapter-bert.png")}
                             className="bert"
@@ -18,7 +19,7 @@ export default function Toolbar() {
                             style={{ marginRight: "15px" }}
                         />
                         <span className="align-middle">AdapterHub Playground</span>
-                    </a>
+                    </Link>
                     <button
                         className="navbar-toggler"
                         type="button"
