@@ -6,6 +6,7 @@ import styled from "styled-components"
 import { CloudComputingAPI } from "../../api/cloudComputing/CloudComputingAPI"
 import { KaggleCloudComputingAPI } from "../../api/cloudComputing/kaggle/KaggleCloudComputingAPI"
 import { Notificationstates, notify } from "../../app"
+import { toAbsoluteStaticFilePath } from "../../toolbox"
 import Footer from "../footer/footer"
 import Toolbar from "../toolbar/toolbar"
 
@@ -35,7 +36,7 @@ const DataQandA: QuestionAnswer[] = [
     {
         question: "How do I need to format my google sheet for sentiment analysis?",
         answerTop: "Format your google sheets similar to this image:",
-        imagLink: "images/formatSentAnal.png",
+        imagLink: toAbsoluteStaticFilePath("images/formatSentAnal.png"),
         answerBottom:
             "A common problem when using our site is that your google sheets document may be loaded with too much data. To work around this problem, simply remove a few columns that should not be analyzed until the error is fixed. Also note that you specify which column to write the results to, so make sure that you don't overwrite any data you want to keep.",
     },
@@ -67,7 +68,7 @@ export function Faqpage() {
                     Frequently Asked Questions
                 </Col>
                 <Col sm={2} onClick={() => history.push(`/`)} className="faq-home">
-                    <img src="images/adapter-bert.png" className="bert" width="45" />
+                    <img src={toAbsoluteStaticFilePath("images/adapter-bert.png")} className="bert" width="45" />
                     Home
                 </Col>
             </Row>

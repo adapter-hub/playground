@@ -1,6 +1,7 @@
 import React, { Component, useContext, useState } from "react"
 import { Button } from "react-bootstrap"
 import { CredentialsContext } from "../../app"
+import { toAbsoluteStaticFilePath } from "../../toolbox"
 
 export default function Toolbar() {
     const { logout } = useContext(CredentialsContext)
@@ -9,9 +10,9 @@ export default function Toolbar() {
         <div>
             <nav className="navbar navbar-expand-md navbar-light bg-light">
                 <div className="container">
-                    <a className="navbar-brand p-0" href="/">
+                    <a className="navbar-brand p-0" href={toAbsoluteStaticFilePath("/")}>
                         <img
-                            src="images/adapter-bert.png"
+                            src={toAbsoluteStaticFilePath("images/adapter-bert.png")}
                             className="bert"
                             width="28"
                             style={{ marginRight: "15px" }}

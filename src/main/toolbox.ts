@@ -1,6 +1,10 @@
 import { DependencyList, useCallback, useEffect, useState } from "react"
 import { parse } from "papaparse"
 
+export function toAbsoluteStaticFilePath(filename: string) {
+    return `/playground/${filename}`
+}
+
 export function findFirstOrDefault<T>(array: Array<T>, predicate: (val: T) => boolean): T {
     const result = array.find(predicate)
     if (result == null) {
@@ -31,5 +35,5 @@ export function useFetchCsv(): [(url: RequestInfo, options?: RequestInit) => voi
 }
 
 export function addCorsProxy(url: string): string {
-    return url//`https://bp2020.ukp.informatik.tu-darmstadt.de:80/cors-anywhere/${url}`
+    return `https://bp2020.ukp.informatik.tu-darmstadt.de:80/cors-anywhere/${url}`
 }
