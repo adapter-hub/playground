@@ -36,20 +36,20 @@ export default function Toolbar() {
                             <Button
                                 className="nav-item nav-secondary my-1 d-md-inline-block Toolbar-TutorialButton"
                                 size="sm"
-                                variant="outline-light"
-                                onClick={() => window.open("/faq", "_blank")}>
-                                <a>
-                                    Faq <i className="fa fa-question-circle" aria-hidden="true"></i>
-                                </a>
+                                as={Link}
+                                target="_blank"
+                                to="/faq"
+                                variant="outline-light">
+                                Faq <i className="fa fa-question-circle" aria-hidden="true"></i>
                             </Button>
                             <Button
                                 className="nav-item nav-secondary my-1 d-md-inline-block Toolbar-TutorialButton"
                                 size="sm"
                                 variant="outline-light"
-                                onClick={() => window.open("https://youtu.be/B1n1SbQkNsA", "_blank")}>
-                                <a>
-                                    Tutorial <i className="fab fa-youtube fa-lg"></i>&nbsp;
-                                </a>
+                                as="a"
+                                href="https://youtu.be/B1n1SbQkNsA"
+                                target="_blank">
+                                Tutorial <i className="fab fa-youtube fa-lg"></i>&nbsp;
                             </Button>
                             <li className="nav-item nav-secondary justify-content-end d-md-inline-block">
                                 <a
