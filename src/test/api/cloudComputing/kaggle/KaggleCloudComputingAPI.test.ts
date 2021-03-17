@@ -46,6 +46,42 @@ test("pushKernel", async () => {
     expect(apiCall.getError()).toEqual(null)
 })
 
+test("pushKernel file", async () => {
+    const cloudComputingAPI: CloudComputingAPI = new KaggleCloudComputingAPI(username, apiToken)
+
+    const kernel: CloudComputingKernel = {
+        name: "file-use-test",
+        type: CloudComputingKernelType.analysis,
+        sheetColumn: 0,
+        sheetIdHash: "ffffff",
+    }
+    const apiCall = await cloudComputingAPI.pushKernel(
+        kernel,
+        "print('cc-test')",
+        "yanikadamson/3606e37d-63ad-4fc3-8d96-a0efc4536cf1"
+    )
+
+    expect(apiCall.hasPushed()).toEqual(true)
+    expect(apiCall.getError()).toEqual(null)
+})
+
+/* Cannot be tested FormData is no nodejs module
+test("uploadFile", async () => {
+    const cloudComputingAPI: CloudComputingAPI = new KaggleCloudComputingAPI(username, apiToken)
+
+    let progress = 0
+    const apiCall = await cloudComputingAPI.uploadFile(new TextEncoder().encode("FILECONTENT-ASDSADASD"), (p) => {
+        expect(progress <= p).toBeTruthy()
+        expect(p >= 0).toBeTruthy()
+        expect(p <= 1).toBeTruthy()
+
+        progress = p
+    })
+    expect(progress === 1).toBeTruthy()
+
+    expect((<string>apiCall).startsWith("yanikadamson/")).toBeTruthy()
+}, 10000)*/
+
 test("getOutputLog", async () => {
     const cloudComputingAPI: CloudComputingAPI = new KaggleCloudComputingAPI(username, apiToken)
     const kernel: CloudComputingKernel = {
@@ -72,13 +108,7 @@ test("getOutputFiles", async () => {
     }
     const apiCall = await cloudComputingAPI.getOutput(kernel)
     expect(apiCall.getFiles()[0].fileName).toEqual("metadata.txt")
-    expect(
-        apiCall
-            .getFiles()[0]
-            .url.startsWith(
-                "https://www.kaggleusercontent.com/kf/49421924/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0"
-            )
-    )
+    expect(apiCall.getFiles()[0].url.startsWith("https://www.kaggleusercontent.com/kf")).toBeTruthy()
 })
 
 test("getStatus", async () => {

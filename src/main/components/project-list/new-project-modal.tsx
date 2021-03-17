@@ -50,16 +50,13 @@ export default function NewProjectModal({
         const googleSheetClient = await new GSpreadSpreadSheetAPI().hasPermissionsForSpreadSheet({
             id: idLink,
         })
-        console.log(newProjectGoogleSheetLink)
         if (googleSheetClient != null) {
             if (!googleSheetClient.hasFoundSheet) {
-                console.log("has not foud sheet")
                 notify(Notificationstates.Error, "Google sheets document could not be found")
                 returnValue = Modaltext.WrongSheetsLink
                 return returnValue
             }
             if (!googleSheetClient.hasCorrectPermissions) {
-                console.log("sheet has wrong permissions")
                 notify(Notificationstates.Error, "Permissions of google sheets are wrong")
                 returnValue = Modaltext.WrongPermissions
                 return returnValue

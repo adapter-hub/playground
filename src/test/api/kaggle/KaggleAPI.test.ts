@@ -1,6 +1,9 @@
 import { KaggleApi } from "../../../main/api/kaggle/KaggleAPI"
 import { KaggleKernelListRequest } from "../../../main/api/kaggle/models/KaggleKernelListRequest"
 import { KaggleKernelPushRequest } from "../../../main/api/kaggle/models/KaggleKernelPushRequest"
+import { v4 as uuidv4 } from "uuid"
+import axios from "axios"
+import { addCorsProxy } from "../../../main/toolbox"
 
 const username = "adapterhubuser"
 const apiToken = "10a58241424f03974eec4dcb66a69e55"
@@ -97,3 +100,45 @@ test("/kernels/status", async () => {
     expect(apiCall.status).toEqual("complete")
     expect(apiCall.failureMessage).toEqual(null)
 })
+
+/* Cannot be tested FormData is no nodejs module
+test("/datasets/upload/file", async () => {
+    const kaggle: KaggleApi = new KaggleApi(username, apiToken)
+    const apiCall = await kaggle.uploadFile({
+        fileName: "filename.txt",
+        contentLength: 0,
+        lastModified: 1612564319,
+    })
+    expect(apiCall.token.startsWith("eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0")).toBeTruthy()
+    expect(
+        apiCall.createUrl.startsWith(
+            "https://www.googleapis.com/upload/storage/v1/b/kaggle-data-sets/o?uploadType=resumable&upload_id="
+        )
+    ).toBeTruthy()
+})*/
+
+/* Cannot be tested FormData is no nodejs module
+test("/datasets/create/new", async () => {
+    const kaggle: KaggleApi = new KaggleApi(username, apiToken)
+    const datasetSlug = uuidv4()
+    const apiCall = await kaggle.createDataset(
+        username,
+        datasetSlug,
+        "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..zglOEF9DTd8qwXsdxTbfjA.hfIIiX3aVWdclRgZvkPeKk3lzmGaBF_0RYfMJ1cdRLKX3PH5QM3lcNtD9uJZ0pAeY92jAwBSVGVBATFhU3nph--er73hSCusrf0Ldf59auAQ5UMpiAzDVC7s1hsOvC7n-xfavXDXk1LJUgdjtOFZMu-l7cn5ivbnQle_5myVLS4vXPyJEk3BMOkOgVnneQOCWrJSMupvhX1fXnbUn9iKt2zGH4C9Pt7ra5AM66e5pDmzWNSIW4nZI3yB1PE3uKDgX_2NJEaM9FHGVoR6ZwcBoCZ_tkZrN_InQ9RuSb-jy8P2LEAnXeAbtJz8XrY4BkGoxZaUNi5LXAXDlFL8vSkjvV4n5Q1UEaRLYVN9dOcyFmYES2UjyaPhzZPSkUqoO_qKI8OMQgmzmTac9FtMjMYwmkLS1EPPUzVpA-y2Pko2J-A.hGwekIGbm8S78Vto-j3EQg"
+    )
+    expect(apiCall).toEqual(username + "/" + datasetSlug)
+})*/
+
+/* Cannot be tested FormData is no nodejs module
+test("create new dataset", async () => {
+    const kaggle: KaggleApi = new KaggleApi(username, apiToken)
+    const datasetSlug = uuidv4()
+    const fileUpload = await kaggle.uploadFile({
+        fileName: "file.lol",
+        contentLength: 11,
+        lastModified: 1612564319,
+    })
+    await axios.post(addCorsProxy(fileUpload.createUrl), "hello there")
+    const apiCall = await kaggle.createDataset(username, datasetSlug, fileUpload.token)
+    expect(apiCall).toEqual(username + "/" + datasetSlug)
+}, 10000)*/

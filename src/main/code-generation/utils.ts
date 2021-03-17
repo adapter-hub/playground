@@ -1,7 +1,7 @@
 // The input type of the task
 export enum InputType {
-    OneInputClassification = "OneInputClassification",
-    TwoInputClassification = "TwoInputClassification",
+    OneInputClassification,
+    TwoInputClassification,
 }
 // the pipeline we use
 export enum Pipeline {
@@ -21,11 +21,13 @@ function contains(list: string[], obj: string): boolean {
 //the list of tasks using the textClassificationPipeline
 const textClassificationPipelineList: string[] = [
     "sentiment/hinglish-twitter-sentiment",
+    "sentiment/hinglish",
     "sentiment/imdb",
     "sentiment/rotten_tomatoes",
     "sentiment/sst-2",
     "argument/ukpsent",
     "dialect/arabic",
+    "dialect/dialect-arabic",
     "lingaccept/cola",
     "ner/conll2003",
     "sts/mrpc",
@@ -33,6 +35,12 @@ const textClassificationPipelineList: string[] = [
     "sts/stackexchange",
     "sts/sts-b",
     "qa/boolq",
+    "nli/multinli",
+    "nli/mnli",
+    "nli/cb",
+    "nli/super_glue_cb",
+    "nli/qnli",
+    "nli/rte"
 ]
 
 //the function to find out the pipeline to use
@@ -50,17 +58,19 @@ export function findNeededPipeline(taskType: string, trainingDataset: string): s
 //the list of tasks using the OneInputClassification
 const oneInputClassificationList: string[] = [
     "sentiment/hinglish-twitter-sentiment",
+    "sentiment/hinglish",
     "sentiment/imdb",
     "sentiment/rotten_tomatoes",
     "sentiment/sst-2",
     "argument/ukpsent",
     "dialect/arabic",
+    "dialect/dialect-arabic",
     "lingaccept/cola",
     "ner/conll2003",
 ]
 //the function to find out the input type of the task  to use
 //and for that we need taskType and trainingDataset
-export function checkIfTheTaskNeedOneOrTwoInputData(taskType: string, trainingDataset: string): InputType {
+export function getInputType(taskType: string, trainingDataset: string): InputType {
     const theTask = `${taskType}/${trainingDataset}`
     if (contains(oneInputClassificationList, theTask)) {
         return InputType.OneInputClassification
@@ -72,11 +82,11 @@ export function checkIfTheTaskNeedOneOrTwoInputData(taskType: string, trainingDa
 const transDicAndGoldLabelTranslationList: string[][] = [
     ["sentiment/imdb", "sentiment/rotten_tomatoes", "sentiment/sst-2", "nli/qnli", "nli/rte", "lingaccept/cola"],
     ["sts/mrpc", "sts/qqp", "sts/stackexchange"],
-    ["sentiment/hinglish-twitter-sentiment"],
+    ["sentiment/hinglish-twitter-sentiment", "sentiment/hinglish"],
     ["argument/ukpsent"],
-    ["nli/cb", "nli/multinli"],
+    ["nli/cb", "nli/super_glue_cb", "nli/multinli", "nli/mnli"],
     ["sts/sts-b"],
-    ["dialect/arabic"],
+    ["dialect/arabic", "dialect/dialect-arabic"],
 ]
 
 //a list of lists for the different transDic and GoldLabelTranslation
@@ -121,5 +131,5 @@ export function checkTransDicAndGoldLabelTranslationOfTheTask(taskType: string, 
             return transDicAndGoldLabelTranslationResultList[i]
         }
     }
-    return ["die Aufage ist noch nicht implementiert", "die Aufage ist noch nicht implementiert"]
+    return ["task not supported yet", "task not supported yet"]
 }

@@ -1,133 +1,97 @@
-import * as codeGen from "./codeGeneration"
-import * as helpFunctions from "./helpfunctions"
+import * as codeGen from "./code-generation"
+import * as utils from "./utils"
 
-export function generateCodeNew(
+export function generateCode(
     parameter: {
         taskType: string
         trainingDataset: string
         modelTransformerClass: string
-        adapterArchitecture: string
         modelName: string
-        adapterGroupName: string
-        nlpTaskType: string
         sheetsAccessToken: string
         sheetsDocumentURL: string
     } & (
-        | {
-              doTraining: false
-              sheetsColumnName: string
-              newNameOfResultColumn: string
-          }
-        | {
-              doTraining: true
-              learningRate: number
-              numTrainEpochs: number
-          }
-    )
+            | {
+                doTraining: false
+                sheetsColumnName: string
+                newNameOfResultColumn: string
+            }
+            | {
+                doTraining: true
+                learningRate: number
+                numTrainEpochs: number
+            }
+        ) &
+        (
+            | {
+                useOwnAdapter: false
+                adapterArchitecture: string
+                adapterGroupName: string
+                nlpTaskType: string
+            }
+            | {
+                useOwnAdapter: true
+                zipFileName: string
+            }
+        )
 ): string {
-    const inputSpecification = helpFunctions.checkIfTheTaskNeedOneOrTwoInputData(
-        parameter.taskType,
-        parameter.trainingDataset
-    )
-    const pipeline = helpFunctions.findNeededPipeline(parameter.taskType, parameter.trainingDataset)
-    const transDicAndGoldLabelTranslation = helpFunctions.checkTransDicAndGoldLabelTranslationOfTheTask(
+    const inputType = utils.getInputType(parameter.taskType, parameter.trainingDataset)
+    const pipeline = utils.findNeededPipeline(parameter.taskType, parameter.trainingDataset)
+    const transDicAndGoldLabelTranslation = utils.checkTransDicAndGoldLabelTranslationOfTheTask(
         parameter.taskType,
         parameter.trainingDataset
     )
     const transDic = transDicAndGoldLabelTranslation[0]
     const goldLabelTranslation = transDicAndGoldLabelTranslation[1]
 
-    const sharedSetupCode = codeGen.genSharedSetupCode(
-        parameter.taskType,
-        parameter.trainingDataset,
+    const sharedStartSetupCode = codeGen.genSharedStartSetup(
         parameter.modelTransformerClass,
-        parameter.adapterArchitecture,
         parameter.modelName,
-        parameter.adapterGroupName,
-        parameter.nlpTaskType,
+        parameter.doTraining,
         parameter.sheetsAccessToken,
         parameter.sheetsDocumentURL,
-        inputSpecification,
-        pipeline,
-        transDic,
+        inputType,
         goldLabelTranslation,
-        parameter.doTraining
+        pipeline
     )
-    let specificCode
-    if (parameter.doTraining) {
-        specificCode = codeGen.genTrainingSpecificCode(
-            parameter.learningRate,
-            parameter.numTrainEpochs,
-            inputSpecification
+    let specificSetupCode
+    if (parameter.useOwnAdapter) {
+        specificSetupCode = codeGen.genLoadUserAdapter(
+            `/kaggle/input/${parameter.zipFileName.split("/")[1]}/default`,
+            parameter.taskType
         )
     } else {
-        specificCode = codeGen.genClassificationSpecificCode(
+        specificSetupCode = codeGen.genLoadAHAdapter(
+            parameter.adapterArchitecture,
+            parameter.taskType,
+            parameter.trainingDataset,
+            parameter.adapterGroupName,
+            parameter.nlpTaskType
+        )
+    }
+
+    const sharedEndSetupCode = codeGen.genSharedEndSetup(pipeline, transDic, parameter.doTraining)
+
+    const setupCode = `${sharedStartSetupCode}
+${specificSetupCode}
+${sharedEndSetupCode}`
+
+    let computationSpecificCode
+    if (parameter.doTraining) {
+        computationSpecificCode = codeGen.genTrainingSpecificCode(
+            parameter.learningRate,
+            parameter.numTrainEpochs,
+            inputType
+        )
+    } else {
+        computationSpecificCode = codeGen.genClassificationSpecificCode(
             parameter.sheetsColumnName,
             parameter.newNameOfResultColumn,
-            inputSpecification
+            inputType
         )
     }
     const sharedFinalizeCode = codeGen.genSharedFinalizeCode(parameter.sheetsDocumentURL, parameter.doTraining)
 
-    return `
-${sharedSetupCode}
-${specificCode}
+    return `${setupCode}
+${computationSpecificCode}
 ${sharedFinalizeCode}`
-}
-
-export function generateCode(parameter: {
-    taskType: string
-    trainingDataset: string
-    modelTransformerClass: string
-    adapterArchitecture: string
-    modelName: string
-    adapterGroupName: string
-    nlpTaskType: string
-    sheetsAccessToken: string
-    sheetsDocumentURL: string
-    sheetsColumnName: string
-    newNameOfResultColumn: string
-    doTraining: true
-    learningRate: number
-    numTrainEpochs: number
-}): string {
-    const myDoTrainingForTesting = true
-    const myLearningRateForTesting = 0.0001
-    const myNumTrainEpochsForTesting = 3
-
-    console.log(parameter.newNameOfResultColumn)
-    console.log(parameter.sheetsColumnName)
-
-    const inputSpecification = helpFunctions.checkIfTheTaskNeedOneOrTwoInputData(
-        parameter.taskType,
-        parameter.trainingDataset
-    )
-    const pipeline = helpFunctions.findNeededPipeline(parameter.taskType, parameter.trainingDataset)
-    const transDicAndGoldLabelTranslation = helpFunctions.checkTransDicAndGoldLabelTranslationOfTheTask(
-        parameter.taskType,
-        parameter.trainingDataset
-    )
-    const transDic = transDicAndGoldLabelTranslation[0]
-    const goldLabelTranslation = transDicAndGoldLabelTranslation[1]
-    return `
-${codeGen.genCode(
-    parameter.taskType,
-    parameter.trainingDataset,
-    parameter.modelTransformerClass,
-    parameter.adapterArchitecture,
-    parameter.modelName,
-    parameter.adapterGroupName,
-    parameter.nlpTaskType,
-    parameter.sheetsAccessToken,
-    parameter.sheetsDocumentURL,
-    parameter.sheetsColumnName,
-    parameter.newNameOfResultColumn,
-    inputSpecification,
-    pipeline,
-    transDic,
-    goldLabelTranslation,
-    myDoTrainingForTesting,
-    myLearningRateForTesting,
-    myNumTrainEpochsForTesting
-)}`
 }

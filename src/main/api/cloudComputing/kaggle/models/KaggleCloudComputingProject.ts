@@ -4,6 +4,9 @@ import { KaggleCloudComputingAPI } from "../KaggleCloudComputingAPI"
 import axios from "axios"
 import { KaggleCloudComputingKernelNaming } from "../KaggleCloudComputingKernelNaming"
 import { addCorsProxy } from "../../../../toolbox"
+import { CloudComputingKernel } from "../../models/CloudComputingKernel"
+import { CloudComputingAPI } from "../../CloudComputingAPI"
+import { CloudComputingOutputFile } from "../../models/CloudComputingOutput"
 
 export class KaggleCloudComputingProject implements CloudComputingProject {
     private kaggleCloudComputingAPI: KaggleCloudComputingAPI
@@ -20,40 +23,69 @@ export class KaggleCloudComputingProject implements CloudComputingProject {
         return this.kernels
     }
 
-    public getSheetsId(): Promise<string> {
-        const sheetId = this.sheetsId
-        if (sheetId) {
-            return new Promise((resolve) => {
-                resolve(sheetId)
-            })
+    public async getSheetsId(): Promise<string> {
+        if (this.sheetsId != null) {
+            return this.sheetsId
         } else {
-            return this.loadSheetsId()
+            if (this.kernels.length == 0) {
+                throw new Error("no kernels in project")
+            }
+
+            const oldestKernel = this.kernels.reduce(
+                (min, currentValue) =>
+                    Date.parse(currentValue.lastRun) < Date.parse(min.lastRun) ? currentValue : min,
+                this.kernels[0]
+            )
+
+            const { sheetId } = await KaggleCloudComputingProject.loadSheetsMetadata(
+                this.kaggleCloudComputingAPI,
+                oldestKernel.kernel
+            )
+            if (sheetId == null) {
+                if (!sheetId) {
+                    throw new Error(
+                        "no metadata found on: " + KaggleCloudComputingKernelNaming.getKaggleName(oldestKernel.kernel)
+                    )
+                }
+            }
+            return sheetId
         }
     }
 
-    public async loadSheetsId(): Promise<string> {
-        if (this.kernels.length == 0) {
-            throw new Error("no kernels in project")
+    public static async loadSheetsMetadata(
+        client: CloudComputingAPI,
+        kernel: CloudComputingKernel
+    ): Promise<{
+        sheetId: string
+        accuracy?: number
+        errors: string | undefined
+        warnings: string | undefined
+        files: Array<CloudComputingOutputFile>
+    }> {
+        const output = await client.getOutput(kernel)
+        const files = output.getFiles()
+        const metaDataFile = files.find((file) => file.fileName == "metadata.txt")
+
+        const warningsFile = files.find((file) => file.fileName === "warnings.txt")
+        const errorsFile = files.find((file) => file.fileName === "Error.txt")
+
+        const metadata: string | undefined =
+            metaDataFile == null ? undefined : await axios.get(addCorsProxy(metaDataFile.url)).then((res) => res.data)
+
+        const [sheetsId, accuracyString] = metadata?.split("\n") ?? []
+        const accuracyFloat = parseFloat(accuracyString)
+        const accuracy = isNaN(accuracyFloat) ? undefined : accuracyFloat
+
+        return {
+            sheetId: sheetsId,
+            accuracy,
+            warnings:
+                warningsFile == null
+                    ? undefined
+                    : await axios.get(addCorsProxy(warningsFile.url)).then((res) => res.data),
+            errors:
+                errorsFile == null ? undefined : await axios.get(addCorsProxy(errorsFile.url)).then((res) => res.data),
+            files,
         }
-
-        const oldestKernel = this.kernels.reduce(
-            (min, currentValue) => (Date.parse(currentValue.lastRun) < Date.parse(min.lastRun) ? currentValue : min),
-            this.kernels[0]
-        )
-
-        const output = await this.kaggleCloudComputingAPI.getOutput(oldestKernel.kernel)
-        const metaDataFile = output.getFiles().find((file) => file.fileName == "metadata.txt")
-
-        if (!metaDataFile) {
-            throw new Error(
-                "no metadata found on: " + KaggleCloudComputingKernelNaming.getKaggleName(oldestKernel.kernel)
-            )
-        }
-
-        const metadata = await axios.get(addCorsProxy(metaDataFile.url as any)).then((res) => res.data)
-
-        const [sheetsUrl] = metadata.split("\n")
-
-        return sheetsUrl
     }
 }

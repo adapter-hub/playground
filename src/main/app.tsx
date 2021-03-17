@@ -5,6 +5,7 @@ import MainPanel from "./components/main-panel/main-panel"
 import { Inputzone } from "./components/inputzone/inputzone"
 import { KaggleCredentials } from "./components/inputzone/inputzone"
 import { ProjectList } from "./components/project-list/project-list"
+import { Faqpage } from "./components/faq-page/faq-page"
 import "./custom.scss"
 import { ToastContainer, toast, ToastOptions } from "react-toastify"
 import "react-toastify/scss/main.scss"
@@ -166,19 +167,29 @@ export function CredentialsWrapper({ children }: PropsWithChildren<any>) {
         )
     } else {
         return (
-            <Inputzone
-                onKaggleCredentials={(credentials, rememberMe) => {
-                    saveKaggleCredentials(credentials, rememberMe)
-                    loadCredentials()
-                }}
-            />
+            <Router>
+                <Switch>
+                    <Route path="/faq">
+                        <Faqpage />
+                    </Route>
+                    <Route path="">
+                        <Inputzone
+                            onKaggleCredentials={(credentials, rememberMe) => {
+                                saveKaggleCredentials(credentials, rememberMe)
+                                loadCredentials()
+                            }}
+                        />
+                    </Route>
+                </Switch>
+                <Footer />
+            </Router>
         )
     }
 }
 
 export function App() {
     return (
-        <div>
+        <div className="overflow-hidden">
             <div className="w-100 bg-secondary p-2 justify-content-end d-flex px-3 align-items-center">
                 <span className="text-light">Beta Version</span>
                 <i className="ml-2 text-light fa fa-info-circle"></i>
@@ -186,14 +197,24 @@ export function App() {
             <ToastContainer />
             <ReactTooltip id="main" />
             <CredentialsWrapper>
-                <Toolbar />
                 <Router>
                     <Switch>
                         <Route
                             path={"/projects/:name/:sheetIdHash"}
-                            render={(props) => <MainPanel {...props} />}></Route>
+                            render={(props) => (
+                                <div>
+                                    <Toolbar />
+                                    <MainPanel {...props} />
+                                </div>
+                            )}></Route>
                         <Route path="/projects">
-                            <ProjectList />
+                            <div>
+                                <Toolbar />
+                                <ProjectList />
+                            </div>
+                        </Route>
+                        <Route path="/faq">
+                            <Faqpage />
                         </Route>
                         <Route path="">
                             <Redirect to="/projects" />

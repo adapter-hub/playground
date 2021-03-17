@@ -51,15 +51,20 @@ export function KernelPage({
     kernel: exisitingKernel,
     gspread,
     onChangedOutput,
+    close,
     client,
     projectName,
+    minimized,
 }: {
     projectName: string
     kernel: CloudComputingKernel | undefined
     gspread: string
+    close: () => void
+    minimized: boolean
     onChangedOutput: () => void
     client: CloudComputingAPI
 }) {
+    const [isMinimized, setIsMinimized] = useState(minimized)
     const [state, setState] = useState<KernelPageState>(
         exisitingKernel != null
             ? {
@@ -113,12 +118,12 @@ export function KernelPage({
     )
 
     const createKernel = useCallback(
-        async (kernel: CloudComputingKernel, code: string) => {
+        async (kernel: CloudComputingKernel, code: string, datasource?: string) => {
             setState({
                 type: KernelPageStateTypeEnum.Creating,
                 kernel,
             })
-            const result = await client.pushKernel(kernel, code)
+            const result = await client.pushKernel(kernel, code, datasource)
             if (!result.hasPushed()) {
                 onError(result.getError() ?? `unable to push kernel, please try again later`, kernel)
             } else {
@@ -135,24 +140,25 @@ export function KernelPage({
     //TODO show the specified sheet column
 
     const computeContent = useCallback(() => {
+        const className = isMinimized ? "d-none" : ""
         switch (state.type) {
             case KernelPageStateTypeEnum.Creating:
                 return (
-                    <div>
+                    <div className={className}>
                         <h2>Status</h2>
                         <Loading>Creating</Loading>
                     </div>
                 )
             case KernelPageStateTypeEnum.Loading:
                 return (
-                    <div>
+                    <div className={className}>
                         <h2>Status</h2>
                         <Loading>Loading</Loading>
                     </div>
                 )
             case KernelPageStateTypeEnum.Error:
                 return (
-                    <div>
+                    <div className={className}>
                         <h2>Error</h2>
                         <p>{state.message}</p>
                     </div>
@@ -160,6 +166,7 @@ export function KernelPage({
             case KernelPageStateTypeEnum.Found:
                 return (
                     <KernelExisitingPage
+                        className={className}
                         kernel={state.kernel}
                         client={client}
                         status={state.status}
@@ -169,23 +176,35 @@ export function KernelPage({
             case KernelPageStateTypeEnum.Defining:
                 return (
                     <TaskConfigurationPage
+                        client={client}
+                        close={close}
                         projectName={projectName}
                         gspread={gspread}
-                        onStart={(kernel, code) => createKernel(kernel, code)}
+                        onStart={(kernel, code, datasource?) => createKernel(kernel, code, datasource)}
                     />
                 )
         }
-    }, [createKernel, onChangedOutput, state, projectName, client])
+    }, [createKernel, onChangedOutput, state, projectName, client, isMinimized])
 
     return (
-        <div className="d-flex flex-column mb-3 p-3 card shadow bg-white">
-            {kernel != null &&
-                (kernel.type === CloudComputingKernelType.analysis ? (
-                    <h1 className="mt-0">Analysis in Column: {toColumn(kernel.sheetColumn - 1)}</h1>
-                ) : (
-                    <h1 className="mt-0">Training ID: {kernel.sheetColumn}</h1>
-                ))}
-            {computeContent()}
+        <div className="col-lg-6 p-2">
+            <div className="d-flex flex-column mb-3 p-3 card shadow bg-white">
+                <div
+                    onClick={() => setIsMinimized(!isMinimized)}
+                    style={{ cursor: "pointer" }}
+                    className="d-flex flex-row align-items-center">
+                    {state.type !== KernelPageStateTypeEnum.Defining && (
+                        <i className={`ml-1 mr-3 fa ${isMinimized ? "fa-angle-right" : "fa-angle-down"}`}></i>
+                    )}
+                    {kernel != null &&
+                        (kernel.type === CloudComputingKernelType.analysis ? (
+                            <h4 className="mt-0">Analysis in Column: {toColumn(kernel.sheetColumn - 1)}</h4>
+                        ) : (
+                            <h4 className="mt-0">Training ID: {kernel.sheetColumn}</h4>
+                        ))}
+                </div>
+                {computeContent()}
+            </div>
         </div>
     )
 }

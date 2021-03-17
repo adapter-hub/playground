@@ -8,7 +8,7 @@ import { GSpreadAPI } from "../../api/gSpread/GSpreadAPI"
 import { GSpreadSpreadSheetAPI } from "../../api/spreadSheet/gSpread/GSpreadSpreadSheetAPI"
 import { CredentialsContext } from "../../app"
 import { useProject } from "../../services/project-service"
-import { VisualizationResultPage } from "../analyse-result-page/visualization-result-panel"
+import { RenderVisualization } from "../analyse-result-page/visualization-result-panel"
 import { KernelPage } from "../kernel-page/kernel-page"
 import Loading from "../loading/loading"
 
@@ -132,16 +132,20 @@ export default function MainPanel({ match, location }: RouteChildrenProps<{ name
             ) : (
                 <div className="mb-3">
                     <h1>Tasks</h1>
-                    {kernels.map((kernel, index) => (
-                        <KernelPage
-                            key={index}
-                            projectName={name}
-                            client={client}
-                            gspread={sheetLink}
-                            kernel={kernel}
-                            onChangedOutput={() => reloadData()}
-                        />
-                    ))}
+                    <div className="container row">
+                        {kernels.map((kernel, index) => (
+                            <KernelPage
+                                minimized={!addedKernels.includes(kernel)}
+                                close={() => setAddedKernels(addedKernels.filter((k) => k != kernel))}
+                                key={index}
+                                projectName={name}
+                                client={client}
+                                gspread={sheetLink}
+                                kernel={kernel}
+                                onChangedOutput={() => reloadData()}
+                            />
+                        ))}
+                    </div>
                     <button onClick={() => addTask()} className="btn btn-primary mb-3">
                         Add Task
                     </button>
@@ -154,9 +158,9 @@ export default function MainPanel({ match, location }: RouteChildrenProps<{ name
                         Reload
                     </button>
                 </div>
-                <VisualizationResultPage
+                <RenderVisualization
                     loading={resultState.loading}
-                    response={resultState.loading ? undefined : (resultState.results as any)}></VisualizationResultPage>
+                    response={resultState.loading ? undefined : (resultState.results as any)}></RenderVisualization>
             </div>
         </div>
     )

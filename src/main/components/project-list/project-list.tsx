@@ -11,6 +11,8 @@ import { CloudComputingKernelType } from "../../api/cloudComputing/models/CloudC
 import { useProjects } from "../../services/project-service"
 import Loading from "../loading/loading"
 import NewProjectModal from "./new-project-modal"
+import { CombineLatestOperator } from "rxjs/internal/observable/combineLatest"
+import "../../custom.scss"
 
 export type ProjectTableData = {
     name: string
@@ -58,7 +60,7 @@ export function ProjectList() {
         },
         {
             dataField: "datestring",
-            text: "Project started on",
+            text: "Created at",
             sort: true,
             sortFunc: (a: any, b: any, order: any, dataField: any, rowA: ProjectTableData, rowB: ProjectTableData) => {
                 if (order === "asc") {
@@ -117,6 +119,8 @@ export function ProjectList() {
                         data={tableData}
                         columns={columns}
                         pagination={paginationFactory({ hideSizePerPage: true })}
+                        classes={"BootstrapTable-hover"}
+                        rowClasses={"BootstrapTable-hover-row"}
                         rowEvents={{
                             onClick: (e: SyntheticEvent, row: ProjectTableData, rowIndex: number) => {
                                 history.push(`/projects/${row.name}/${row.sheetIdHash}`)

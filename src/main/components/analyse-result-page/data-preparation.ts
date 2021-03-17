@@ -1,13 +1,17 @@
 import { min } from "rxjs/operators"
 import { Row, Timeintervall } from "./visualization-result-panel"
+import { DateParser } from "./date-parser"
 
 function filterString(val: any): val is string {
     return typeof val === "string"
 }
 
+const dateParser = new DateParser()
+
 export function prepareData(nameOfRows: Array<string>, rows: Array<Row>) {
     let lowestdate: Date | null = null
     let highestdate: Date | null = null
+    let numberOfTypesCounter: number = 0
 
     const allTypes = new Map<string, Array<string | Date>>()
 
@@ -15,20 +19,35 @@ export function prepareData(nameOfRows: Array<string>, rows: Array<Row>) {
         for (let columnIndex = 2; columnIndex < line.length; columnIndex++) {
             const typeAtColumn: string = line[columnIndex][0]
             const nameOfColumn: string = getRowNameFromIndex(columnIndex, nameOfRows)
+
             if (typeAtColumn != null && typeAtColumn.length > 0) {
                 if (nameOfColumn != "date") {
                     if (allTypes.get(nameOfColumn)?.some((e) => e == typeAtColumn)) {
                         //do nothing
                     } else {
-                        if (!allTypes.has(nameOfColumn)) {
-                            allTypes.set(nameOfColumn, [typeAtColumn])
+                        numberOfTypesCounter++
+                        if (numberOfTypesCounter < 100) {
+                            if (!allTypes.has(nameOfColumn)) {
+                                allTypes.set(nameOfColumn, [typeAtColumn])
+                            } else {
+                                allTypes.get(nameOfColumn)?.push(typeAtColumn)
+                            }
                         } else {
-                            allTypes.get(nameOfColumn)?.push(typeAtColumn)
+                            let listOfAllLabelNames = null
+                            let listGroupBy = null
+                            let allTypes = null
+                            return {
+                                listOfAllLabelNames,
+                                listGroupBy,
+                                allTypes,
+                            }
                         }
                     }
                 } else {
-                    if (!isNaN(Date.parse(line[getIndexFromRowName("date", nameOfRows)][0]))) {
-                        const DateInLine: Date = new Date(Date.parse(line[getIndexFromRowName("date", nameOfRows)][0]))
+                    if (!isNaN(dateParser.parse(line[getIndexFromRowName("date", nameOfRows)][0]))) {
+                        const DateInLine: Date = new Date(
+                            dateParser.parse(line[getIndexFromRowName("date", nameOfRows)][0])
+                        )
                         lowestdate == null
                             ? (lowestdate = DateInLine)
                             : lowestdate > DateInLine
@@ -77,7 +96,6 @@ export function prepareData(nameOfRows: Array<string>, rows: Array<Row>) {
     return {
         listOfAllLabelNames,
         listGroupBy,
-        nameOfRows,
         allTypes,
     }
 }
@@ -115,7 +133,7 @@ function groupByDate(
             const HighestDate: Date = returnRoundOffDatePerIntervall(intervall, datesarray[1])
             let DataPerDate: any = {}
             for (const line of rows) {
-                const LineDate: Date = new Date(Date.parse(line[getIndexFromRowName("date", nameOfRows)][0]))
+                const LineDate: Date = new Date(dateParser.parse(line[getIndexFromRowName("date", nameOfRows)][0]))
                 const RoundedLineDate: string = returnRoundOffDatePerIntervall(intervall, LineDate).toString()
                 if (DataPerDate[RoundedLineDate] == null) {
                     DataPerDate[RoundedLineDate] = {}
@@ -128,7 +146,8 @@ function groupByDate(
                             DataPerDate,
                             line,
                             RoundedLineDate,
-                            nameOfRows
+                            nameOfRows,
+                            minConfidenz
                         )
                     }
                 }
@@ -253,7 +272,8 @@ function insertDataCellIntoObject(
     DataPerDate: any,
     line: Row,
     RoundedLineDate: string,
-    nameOfRows: Array<string>
+    nameOfRows: Array<string>,
+    minConfidenz: number
 ) {
     const singlename: string = getRowNameFromIndex(RowsIndex, nameOfRows) + "_" + line[RowsIndex][0]
 
@@ -264,7 +284,7 @@ function insertDataCellIntoObject(
     }
 
     for (let missingrows: number = RowsIndex + 1; missingrows < line.length; missingrows++) {
-        if (RowsIndex != getIndexFromRowName("date", nameOfRows)) {
+        if (missingrows != getIndexFromRowName("date", nameOfRows) && line[missingrows][1] > minConfidenz) {
             const crossproductname: string[] = [
                 singlename,
                 getRowNameFromIndex(missingrows, nameOfRows) + "_" + line[missingrows][0],

@@ -13,6 +13,7 @@ import {
     Line,
     AreaChart,
     Area,
+    ResponsiveContainer,
 } from "recharts"
 import { curveCardinal } from "d3-shape"
 import { colors } from "react-select/src/theme"
@@ -74,10 +75,10 @@ export default function Charts({
                     height={600}
                     data={data}
                     margin={{
-                        top: 5,
+                        top: 10,
                         right: 30,
-                        left: 20,
-                        bottom: 5,
+                        left: 0,
+                        bottom: 0,
                     }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
@@ -85,7 +86,7 @@ export default function Charts({
                         label={{ value: currentlygroupedby, position: "centerBottom", dy: 10 }}
                         height={40}
                     />
-                    <YAxis label={{ value: "frequency", position: "inside", dx: -30 }} width={100} />
+                    <YAxis label={{ value: "frequency", position: "inside", dx: -20 }} width={115} />
                     <Tooltip wrapperStyle={{ backgroundColor: "#FFF" }} />
                     <Legend verticalAlign="top" wrapperStyle={{ lineHeight: "40px" }} />
                     {visibleOutputLines.map((name, index) => (
@@ -113,10 +114,10 @@ export default function Charts({
                     height={600}
                     data={data}
                     margin={{
-                        top: 5,
+                        top: 10,
                         right: 30,
-                        left: 20,
-                        bottom: 5,
+                        left: 0,
+                        bottom: 0,
                     }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
@@ -125,7 +126,7 @@ export default function Charts({
                         label={{ value: currentlygroupedby, position: "centerBottom", dy: 10 }}
                         height={40}
                     />
-                    <YAxis label={{ value: "frequency", position: "inside", dx: -30 }} width={100} />
+                    <YAxis label={{ value: "frequency", position: "inside", dx: -20 }} width={115} />
                     <Tooltip wrapperStyle={{ backgroundColor: "#FFF" }} />
                     <Legend verticalAlign="top" wrapperStyle={{ lineHeight: "40px" }} />
                     <ReferenceLine y={0} stroke="#000" />
@@ -168,7 +169,7 @@ export default function Charts({
                         label={{ value: currentlygroupedby, position: "centerBottom", dy: 10 }}
                         height={40}
                     />
-                    <YAxis label={{ value: "frequency", position: "inside", dx: -30 }} width={100} />
+                    <YAxis label={{ value: "frequency", position: "inside", dx: -20 }} width={115} />
                     <Tooltip wrapperStyle={{ backgroundColor: "#FFF" }} />
                     <Legend verticalAlign="top" wrapperStyle={{ lineHeight: "40px" }} />
                     {visibleOutputLines.map((name, index) => (
@@ -214,8 +215,8 @@ export default function Charts({
                         height={40}
                     />
                     <YAxis
-                        label={{ value: "frequency", position: "inside", dx: -30 }}
-                        width={150}
+                        label={{ value: "frequency", position: "inside", dx: -20 }}
+                        width={115}
                         tickFormatter={toPercent}
                     />
                     <Tooltip wrapperStyle={{ backgroundColor: "#FFF" }} content={renderTooltipContent} />
@@ -261,7 +262,7 @@ export default function Charts({
                         label={{ value: currentlygroupedby, position: "centerBottom", dy: 10 }}
                         height={40}
                     />
-                    <YAxis label={{ value: "frequency", position: "inside", dx: -30 }} width={150} />
+                    <YAxis label={{ value: "frequency", position: "inside", dx: -20 }} width={115} />
                     <Tooltip wrapperStyle={{ backgroundColor: "#FFF" }} />
                     {visibleOutputLines.map((name, index) => (
                         <Area
@@ -291,5 +292,11 @@ export default function Charts({
             visualization = <div>No Graph</div>
             break
     }
-    return <div>{visualization}</div>
+    return (
+        <div className="w-100" style={{ height: 500 }}>
+            <ResponsiveContainer width="100%" height="100%">
+                {visualization}
+            </ResponsiveContainer>
+        </div>
+    )
 }

@@ -7,6 +7,8 @@ import { KaggleKernelStatus } from "./models/KaggleKernelStatus"
 import { KaggleKernelOutput } from "./models/KaggleKernelOutput"
 import { KaggleKernelPull } from "./models/KaggleKernelPull"
 import { addCorsProxy } from "../../toolbox"
+import { KaggleInputFile } from "./models/KaggleInputFile"
+import { KaggleFileUploadToken } from "./models/KaggleFileUploadToken"
 
 export class KaggleApi {
     BASE_PATH = "https://www.kaggle.com/api/v1"
@@ -97,6 +99,49 @@ export class KaggleApi {
                 this.checkForError(data)
 
                 return data
+            })
+    }
+
+    public uploadFile(file: KaggleInputFile): Promise<KaggleFileUploadToken> {
+        const formData = new FormData()
+        formData.append("fileName", file.fileName)
+
+        return axios
+            .post(
+                addCorsProxy(this.BASE_PATH + "/datasets/upload/file/" + file.contentLength + "/" + file.lastModified),
+                formData,
+                {
+                    auth: { username: this.userName, password: this.apiToken },
+                }
+            )
+            .then((response) => {
+                const data = response.data
+                this.checkForError(data)
+
+                return data
+            })
+    }
+
+    public createDataset(userName: string, datasetSlug: string, fileToken: string): Promise<string> {
+        return axios
+            .post(
+                addCorsProxy(this.BASE_PATH + "/datasets/create/new"),
+                {
+                    title: datasetSlug,
+                    slug: datasetSlug,
+                    ownerSlug: userName,
+                    files: [{ token: fileToken }],
+                    isPrivate: true,
+                },
+                { auth: { username: this.userName, password: this.apiToken } }
+            )
+            .then((response) => {
+                const data = response.data
+                if (data.status !== "ok" && data.error !== null) {
+                    throw data
+                }
+
+                return userName + "/" + datasetSlug
             })
     }
 

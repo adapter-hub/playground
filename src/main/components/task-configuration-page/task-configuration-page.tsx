@@ -6,13 +6,16 @@ import Tasks from "../../../../generated/AdapterHub.json"
 import Editor from "react-simple-code-editor"
 import { highlight, languages } from "prismjs"
 import "prismjs/components/prism-python"
-import { generateCodeNew } from "../../code-generation/main"
+import { generateCode } from "../../code-generation/main"
 import "prismjs/themes/prism-okaidia.css"
 import { CloudComputingKernel } from "../../api/cloudComputing/models/CloudComputingKernel"
 import { CloudComputingKernelType } from "../../api/cloudComputing/models/CloudComputingKernelType"
 import { AnalysisExplanation } from "./analysis-explanation"
 import Select from "react-select"
+import { AdapterInputzone } from "../inputzone/adapter-inputzone"
 import ReactTooltip from "react-tooltip"
+import { AdapterConfig } from "../../services/adapter-parse-service"
+import { CloudComputingAPI } from "../../api/cloudComputing/CloudComputingAPI"
 
 export type Dataset = {
     name: string
@@ -58,16 +61,21 @@ export default function TaskConfigurationPage({
     onStart,
     gspread,
     projectName,
+    client,
+    close,
 }: {
-    onStart: (kernel: CloudComputingKernel, code: string) => void
+    client: CloudComputingAPI
+    onStart: (kernel: CloudComputingKernel, code: string, datasource?: string) => void
     projectName: string
     gspread: string
+    close: () => void
 }) {
     const [selectedTaskType, setSelectedTaskTypeState] = useState<TaskType>(DefaultTaskType)
     const [selectedDataset, setSelectedDatasetState] = useState<Dataset>(DefaultDataset)
     const [selectedAdapter, setSelectedAdapter] = useState<Adapter>(DefaultAdapter)
     const [expertMode, setExportMode] = useState<boolean>(false)
-    const [codeEditor, setCodeEditor] = useState<boolean>(false)
+    const [expertSelection, setExpertSelection] = useState<"config" | "codeEditor" | "uploadAdapter">("config")
+    const [ownAdapter, setOwnAdapter] = useState(false)
     const [showExplanation, setShowExplanation] = useState(false)
 
     //for analysis
@@ -82,18 +90,33 @@ export default function TaskConfigurationPage({
 
     const [code, setCode] = useState<string>("")
 
+    const [adapterConfig, setAdapterConfig] = useState<(AdapterConfig & { filename: string }) | undefined>(undefined)
+
     useEffect(() => {
         setCode(
-            generateCodeNew({
+            generateCode({
                 taskType: selectedTaskType.task,
-                trainingDataset: selectedDataset.dataset,
-                adapterArchitecture: selectedAdapter.architecture,
-                adapterGroupName: selectedAdapter.groupname,
-                modelName: selectedAdapter.modelName,
-                modelTransformerClass: selectedAdapter.modelTransformerClass,
-                nlpTaskType: selectedAdapter.nlpTaskType,
                 sheetsAccessToken: `{"type": "service_account","project_id": "testsheets-297914","private_key_id": "5ea165b82d629bac7c1fe35f3935e1db6f1175ae","private_key": "-----BEGIN PRIVATE KEY-----\\\\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCj3XWZP6+6Uhyh\\\\nAPUaldFsCp7b9yGvLnJuv+AyKyyJ6kpL0wqFiovhLoLgKRXQ57V4M3ZeoaU/XAkP\\\\nWHO8P71T/YcrtMK1UP5kMg4axYb+oJirIAiy1IUmAp4vjlGcosulYlMcURawOASP\\\\nj/bZA19F9/tvL5GDcH9lRdzQPPK8rD20udaSWHeJ2uM3e0irsM2co+KTWnX4D8tb\\\\nWWolxIEQtd3158udG3KxligNBrT+6EIGg2iPTsFyD3JvAZkwP6aFJmqr+9LSXcJ7\\\\nhYnRevldRVVjkOfG84nPwPkmFYAwT8RFa4gmp3wWajqbO89S1y2kM5uHz6qEX8lh\\\\nH9cdbJ2RAgMBAAECggEABbaZ/A7hZKCqSN7MrPGeTKMOKOMz9HStHrln6rfgpKpb\\\\njss76a4L9Hz3qTMlhJQfmqJItUHzjgL6eeN+nYinZD9JsDdsNoAtbnbkUQCkFUqq\\\\nKAVE6F9KiSm8NDJFHC385bZI6YrWPKynVA4T8DsS3lCoHpdM/oU0m+ZUrZoCaJuW\\\\nbAnepWabGywyDiMV2qb5OpZnVYPVPpsWk/+xOTmerAQFW98Q+LAiUG+UOskSed+l\\\\nCEcQi/CqS6AiGPC/W/QltXMSd//a5GryHVpNdJ6z2xdc+miKIPZqyai1W7CNiZyD\\\\nNKPOb+whtzHUdX0sRaf0W4QV5QzjaCV4LJ182laRJQKBgQDitP6kwn98bTZV8eOm\\\\nRGKGsx3ED18enb2FCB+1gtW7xjkXwTKCNLMUgIoYx1wCc+qDuxuV5KN6gZgNID5s\\\\nqIdpISoaS+M44u5Rygx8Qn6WA20hsc1hlRi8tuAm24vP9kmKN64mNBqcEfVevlyp\\\\nnvPpwMCZLWDW/3BIfNyDe+HKEwKBgQC5CcgdKsqyFwHZ+oNbZxnbocApgQzYeuLk\\\\nLDT5qMasdcRvR17QNqb+yTPem60FV8cUrqhf8To1F9rNRJWnd05K4UPp2vZUqsan\\\\n5KBJZNfPtj+26bkoJCARGAnTB+MRHliXz1W92Lfv48sNdWR+5taajQVH6Wn1IDrd\\\\n+7dXrw0uSwKBgAVfRp1+4mh/agc1WTCqdC8+9VidCKMAF+qcG6xAcnIlq1qtwFWn\\\\njArTVPJrXvnL52XBvFCb/2e6xHCjL/eBMtxB5e6Dl9nUPtN/VzZmmPtTD3X58aT7\\\\nVH+8Ual6EGEYM/vrf9v15h+GqWraVfXLB3qlj6rRkXbmzLFbDBqth9czAoGAIQAF\\\\nmG4RSEGiKuXql1qD2g+23bAOQm1oGZlouT3IcOlv5wireCbHEZmAjqrk6JcHAkFD\\\\n9hhncSCX/RPGPN+iLuiN3B8Y33C1jSvRCkXZ10mBg3Wbd/U5YtMOrXwymtL2qdxo\\\\nRjtoUngltnjBO4CftWCBGJogM39UAFLsF884YpECgYANj5q/R1R0tpVagcfPzF8+\\\\nnNwG2ohkdR9q5RQrCU7Vopvzd2MYssk0LIOnAlhSqeYQk2VMyqAfERpdf9dUPqfe\\\\njqFe0lNZHIDcy1592oB8MUQ8aDAcntH+vwWUW1feGPVLp1AlyQ8Dkcu+IPR2k1jp\\\\n8UwhxeJSjADqQ55Jzjuizg==\\\\n-----END PRIVATE KEY-----\\\\n","client_email": "hanz-590@testsheets-297914.iam.gserviceaccount.com","client_id": "103458971298238973578","auth_uri": "https://accounts.google.com/o/oauth2/auth","token_uri": "https://oauth2.googleapis.com/token","auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/hanz-590%40testsheets-297914.iam.gserviceaccount.com"}`,
                 sheetsDocumentURL: gspread,
+                ...(ownAdapter
+                    ? {
+                          useOwnAdapter: true,
+                          zipFileName: adapterConfig?.filename ?? "<adapter filename will be filled in here>",
+                          modelName: adapterConfig?.model_name ?? "<adapter modelName will be filled in here>",
+                          modelTransformerClass:
+                              adapterConfig?.model_class ?? "<adapter modelTransformerClass will be filled in here>",
+                          trainingDataset:
+                              adapterConfig?.adapter_name ?? "<adapter trainingDataset will be filled in here>",
+                      }
+                    : {
+                          useOwnAdapter: false,
+                          adapterArchitecture: selectedAdapter.architecture,
+                          adapterGroupName: selectedAdapter.groupname,
+                          nlpTaskType: selectedAdapter.nlpTaskType,
+                          modelName: selectedAdapter.modelName,
+                          modelTransformerClass: selectedAdapter.modelTransformerClass,
+                          trainingDataset: selectedDataset.dataset,
+                      }),
                 ...(executionType === CloudComputingKernelType.analysis
                     ? {
                           doTraining: false,
@@ -111,6 +134,8 @@ export default function TaskConfigurationPage({
         selectedTaskType,
         selectedDataset,
         selectedAdapter,
+        adapterConfig,
+        ownAdapter,
         gspread,
         classificationName,
         column,
@@ -135,7 +160,13 @@ export default function TaskConfigurationPage({
 
     return (
         <div className="d-flex flex-column">
-            <h2>Create Task</h2>
+            <div className="d-flex align-items-center">
+                <h4>Create Task</h4>
+                <div className="flex-grow-1"></div>
+                <button className="btn" onClick={close}>
+                    <i className="fa fa-times"></i>
+                </button>
+            </div>
             <Form.Group>
                 <Form.Check
                     type="checkbox"
@@ -217,8 +248,11 @@ export default function TaskConfigurationPage({
                 <ul className="nav nav-tabs mb-3">
                     <li className="nav-item">
                         <a
-                            onClick={() => setCodeEditor(false)}
-                            className={!codeEditor ? "nav-link active" : "nav-link"}
+                            onClick={() => {
+                                setOwnAdapter(false)
+                                setExpertSelection("config")
+                            }}
+                            className={expertSelection == "config" ? "nav-link active" : "nav-link"}
                             aria-current="page"
                             style={{ cursor: "pointer" }}>
                             Config
@@ -226,8 +260,20 @@ export default function TaskConfigurationPage({
                     </li>
                     <li className="nav-item">
                         <a
-                            onClick={() => setCodeEditor(true)}
-                            className={codeEditor ? "nav-link active" : "nav-link"}
+                            onClick={() => {
+                                setOwnAdapter(true)
+                                setExpertSelection("uploadAdapter")
+                            }}
+                            className={expertSelection == "uploadAdapter" ? "nav-link active" : "nav-link"}
+                            aria-current="page"
+                            style={{ cursor: "pointer" }}>
+                            Upload Adapter
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            onClick={() => setExpertSelection("codeEditor")}
+                            className={expertSelection == "codeEditor" ? "nav-link active" : "nav-link"}
                             aria-current="page"
                             style={{ cursor: "pointer" }}>
                             Code Editor
@@ -235,7 +281,7 @@ export default function TaskConfigurationPage({
                     </li>
                 </ul>
             )}
-            {!(codeEditor && expertMode) ? (
+            {expertSelection == "config" || expertSelection == "uploadAdapter" || !expertMode ? (
                 <Form>
                     <Form.Group>
                         <Form.Label>Analysis Task Type</Form.Label>
@@ -254,47 +300,60 @@ export default function TaskConfigurationPage({
                         </Form.Control>
                     </Form.Group>
 
-                    {expertMode && [
-                        <Form.Group key={"dataset"}>
-                            <Form.Label>Dataset</Form.Label>
-                            <Form.Control
-                                onChange={(event) =>
-                                    setSelectedDataset(
-                                        findFirstOrDefault(
-                                            selectedTaskType.datasets,
-                                            (t) => t.name === event.currentTarget.value
+                    {expertMode &&
+                        expertSelection == "config" && [
+                            <Form.Group key={"dataset"}>
+                                <Form.Label>Dataset</Form.Label>
+                                <Form.Control
+                                    onChange={(event) =>
+                                        setSelectedDataset(
+                                            findFirstOrDefault(
+                                                selectedTaskType.datasets,
+                                                (t) => t.name === event.currentTarget.value
+                                            )
                                         )
-                                    )
-                                }
-                                value={selectedDataset.name}
-                                as="select"
-                                custom>
-                                {selectedTaskType.datasets.map((dataset, index) => (
-                                    <option key={index}>{dataset.name}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>,
+                                    }
+                                    value={selectedDataset.name}
+                                    as="select"
+                                    custom>
+                                    {selectedTaskType.datasets.map((dataset, index) => (
+                                        <option key={index}>{dataset.name}</option>
+                                    ))}
+                                </Form.Control>
+                            </Form.Group>,
 
-                        <Form.Group key={"adapter"}>
-                            <Form.Label>Adapter</Form.Label>
-                            <Form.Control
-                                onChange={(event) =>
-                                    setSelectedAdapter(
-                                        findFirstOrDefault(
-                                            selectedDataset.adapters,
-                                            (t) => getAdapterIdentifier(t) === event.currentTarget.value
+                            <Form.Group key={"adapter"}>
+                                <Form.Label>Adapter</Form.Label>
+                                <Form.Control
+                                    onChange={(event) =>
+                                        setSelectedAdapter(
+                                            findFirstOrDefault(
+                                                selectedDataset.adapters,
+                                                (t) => getAdapterIdentifier(t) === event.currentTarget.value
+                                            )
                                         )
-                                    )
-                                }
-                                value={getAdapterIdentifier(selectedAdapter)}
-                                as="select"
-                                custom>
-                                {selectedDataset.adapters.map((adapter, index) => (
-                                    <option key={index}>{getAdapterIdentifier(adapter)}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>,
-                    ]}
+                                    }
+                                    value={getAdapterIdentifier(selectedAdapter)}
+                                    as="select"
+                                    custom>
+                                    {selectedDataset.adapters.map((adapter, index) => (
+                                        <option key={index}>{getAdapterIdentifier(adapter)}</option>
+                                    ))}
+                                </Form.Control>
+                            </Form.Group>,
+                        ]}
+
+                    {expertMode &&
+                        expertSelection == "uploadAdapter" && [
+                            <p key="warning" className="font-weight-bold text-warning">
+                                Please make sure your adapter was trained on the matching task!
+                            </p>,
+                            <AdapterInputzone
+                                key="adapterInputzone"
+                                client={client}
+                                onAdapterUploaded={setAdapterConfig}
+                            />,
+                        ]}
                 </Form>
             ) : (
                 <Editor
@@ -320,7 +379,9 @@ export default function TaskConfigurationPage({
             {showExplanation && <AnalysisExplanation />}
 
             <button
-                className="btn btn-primary mb-3"
+                className={`btn btn-primary mb-3 ${
+                    expertSelection === "uploadAdapter" && adapterConfig == null ? "disabled" : ""
+                }`}
                 onClick={() => {
                     let columnIndex: number
                     if (executionType === CloudComputingKernelType.analysis) {
@@ -331,6 +392,9 @@ export default function TaskConfigurationPage({
                     } else {
                         columnIndex = Math.floor(Math.random() * 1000)
                     }
+                    if (expertSelection === "uploadAdapter" && adapterConfig == null) {
+                        return
+                    }
                     onStart(
                         {
                             name: projectName,
@@ -338,7 +402,8 @@ export default function TaskConfigurationPage({
                             sheetIdHash: hashSheetId(gspread),
                             type: executionType,
                         },
-                        code
+                        code,
+                        adapterConfig != null ? adapterConfig.filename : undefined
                     )
                 }}>
                 Start

@@ -1,7 +1,9 @@
 import React, { useMemo, useState, useEffect, useContext, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { CloudComputingAPI } from "../../api/cloudComputing/CloudComputingAPI"
+import { KaggleCloudComputingProject } from "../../api/cloudComputing/kaggle/models/KaggleCloudComputingProject"
 import { CloudComputingKernel } from "../../api/cloudComputing/models/CloudComputingKernel"
+import { CloudComputingOutputFile } from "../../api/cloudComputing/models/CloudComputingOutput"
 import { CloudComputingStatus } from "../../api/cloudComputing/models/CloudComputingStatus"
 import Loading from "../loading/loading"
 
@@ -33,14 +35,27 @@ export function KernelExisitingPage({
     status,
     client,
     onChangedOutput,
+    className,
 }: {
     kernel: CloudComputingKernel
     status: CloudComputingStatus
     client: CloudComputingAPI
     onChangedOutput: () => void
+    className: string
 }) {
     const [state, setState] = useState<KernelExistingPageState>(computeNewState(status))
     const [intervalRef, setIntervalRef] = useState<number | undefined>(undefined)
+    const [metadata, setMetadata] = useState<
+        | {
+              sheetId: string
+              accuracy?: number
+              errors: string | undefined
+              warnings: string | undefined
+              files: Array<CloudComputingOutputFile>
+          }
+        | null
+        | undefined
+    >(null)
 
     const removeInterval = useCallback(() => {
         clearInterval(intervalRef)
@@ -62,6 +77,10 @@ export function KernelExisitingPage({
                 removeInterval()
             }
         }
+
+        if (state.type === KernelExisitingPageStateEnumType.Done) {
+            KaggleCloudComputingProject.loadSheetsMetadata(client, kernel).then(setMetadata)
+        }
     }, [state.type]) //only execute when type changes
 
     useEffect(() => {
@@ -77,38 +96,75 @@ export function KernelExisitingPage({
         switch (state.type) {
             case KernelExisitingPageStateEnumType.CheckingStatus:
                 return (
-                    <div>
-                        <h2>Status</h2>
+                    <div className={className}>
+                        <h5>Status</h5>
                         <Loading>Checking Status</Loading>
                     </div>
                 )
             case KernelExisitingPageStateEnumType.WaitingStatus:
                 return (
-                    <div>
-                        <h2>Status</h2>
-                        <Loading>{state.message}</Loading>
+                    <div className={className}>
+                        <h5>Status</h5>
+                        <Loading>
+                            {state.message} - <span className="font-weight-bold">this takes several minutes</span>
+                        </Loading>
                     </div>
                 )
             case KernelExisitingPageStateEnumType.Error:
                 return (
-                    <div>
-                        <h2>Error</h2>
-                        <p>{state.message}</p>
+                    <div className={className}>
+                        <h5>Error</h5>
+                        <span>{state.message}</span>
                     </div>
                 )
             case KernelExisitingPageStateEnumType.PushingKernel:
                 return (
-                    <div>
-                        <h2>Status</h2>
+                    <div className={className}>
+                        <h5>Status</h5>
                         <Loading>Pushing Kernel</Loading>
                     </div>
                 )
             case KernelExisitingPageStateEnumType.Done:
                 return (
-                    <div>
-                        <h2 className="mt-0">Done</h2>
-                        <p>Execution finished</p>
-                        <button className="btn btn-outline-primary disabled">View Details</button>
+                    <div className={className}>
+                        <h5 className="mt-0">Done</h5>
+                        {metadata === null ? (
+                            <Loading></Loading>
+                        ) : (
+                            <div>
+                                Execution finished
+                                {metadata ? (
+                                    <div>
+                                        {metadata.accuracy}
+                                        {metadata?.files.length > 0 && (
+                                            <div>
+                                                <h5>Files</h5>
+                                                {metadata?.files.map((file, index) => (
+                                                    <a className="d-block" key={index} href={file.url}>
+                                                        {file.fileName}
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    "metadata not stored"
+                                )}
+                                {metadata?.warnings && (
+                                    <div>
+                                        <h5>Warnings</h5>
+                                        {metadata.warnings}
+                                    </div>
+                                )}
+                                {metadata?.errors && (
+                                    <div>
+                                        <h5>Errors</h5>
+                                        {metadata.errors}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        <button className="btn btn-sm mt-3 btn-outline-primary disabled">View Logs</button>
                     </div>
                 )
         }

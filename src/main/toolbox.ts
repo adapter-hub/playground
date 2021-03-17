@@ -31,5 +31,5 @@ export function useFetchCsv(): [(url: RequestInfo, options?: RequestInit) => voi
 }
 
 export function addCorsProxy(url: string): string {
-    return `https://ahp.signinit.de/cors-anywhere/${url}`
+    return `https://bp2020.ukp.informatik.tu-darmstadt.de:80/cors-anywhere/${url}`
 }

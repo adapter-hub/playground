@@ -24,6 +24,47 @@ $nav-pills-link-active-bg: $secondary;
 // --------
 //
 
+.BootstrapTable-hover > tbody > tr.BootstrapTable-hover-row:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.faq-header {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.faq-header:hover {
+    cursor: pointer;
+}
+
+.faq-icon {
+    color: #39b3c6;
+}
+
+.faq-header:hover .faq-icon {
+    color: #ff8513;
+}
+
+.faq-home {
+    font-weight: 500;
+    font-size: 2rem;
+}
+
+.faq-home:hover {
+    cursor: pointer;
+    color: #d6761c;
+}
+
+.Toolbar-TutorialButton {
+    background: white;
+    color: #545556;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-weight: bold;
+}
+
 $break-iphone-x: 400px;
 $break-iphone-se: 320px;
 
