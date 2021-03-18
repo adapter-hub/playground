@@ -94,7 +94,9 @@ export function Inputzone({
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: ".json" })
 
     const WrongFormat = () => (
-        <p style={{ pointerEvents: "none", color: "#d6331a", fontSize: "1.6rem" }}>Your file was corrupted. Please try again :)</p>
+        <p style={{ pointerEvents: "none", color: "#d6331a", fontSize: "1.6rem" }}>
+            Your file was corrupted. Please try again :)
+        </p>
     )
     const InvalidCredentials = () => (
         <p style={{ pointerEvents: "none", color: "#d6331a", fontSize: "1.3rem", textAlign: "center" }}>
