@@ -5,7 +5,8 @@ import { useHistory } from "react-router-dom"
 import styled from "styled-components"
 import { CloudComputingAPI } from "../../api/cloudComputing/CloudComputingAPI"
 import { KaggleCloudComputingAPI } from "../../api/cloudComputing/kaggle/KaggleCloudComputingAPI"
-import { Notificationstates, notify } from "../../app"
+import { credentialsAuthorized, Notificationstates, notify } from "../../app"
+import Loading from "../loading/loading"
 
 const Container = styled.div`
     flex: 1;
@@ -38,6 +39,7 @@ enum KaggleCredentialsState {
     InvalidCredentials,
     ShowNothing,
     MissingConsent,
+    Loading,
 }
 
 export function Inputzone({
@@ -61,12 +63,19 @@ export function Inputzone({
                 reader.onabort = () => console.log("file reading was aborted")
                 reader.onerror = () => console.log("file reading has failed")
                 reader.onload = async () => {
+                    setshowMessagebaddata(KaggleCredentialsState.Loading)
+
                     const binaryStr: string | ArrayBuffer | null = reader.result
 
                     if (typeof binaryStr === "string") {
                         try {
                             const credentials: KaggleCredentials = JSON.parse(binaryStr)
-                            onKaggleCredentials(credentials, rememberMe)
+
+                            if (await credentialsAuthorized(credentials.username, credentials.key)) {
+                                onKaggleCredentials(credentials, rememberMe)
+                            } else {
+                                setshowMessagebaddata(KaggleCredentialsState.InvalidCredentials)
+                            }
                         } catch (error) {
                             setshowMessagebaddata(KaggleCredentialsState.WrongFormat)
                             notify(Notificationstates.Error, "Login unsuccessul")
@@ -140,6 +149,10 @@ export function Inputzone({
                         <WrongFormat />
                     ) : showMessagebaddata === KaggleCredentialsState.InvalidCredentials ? (
                         <InvalidCredentials />
+                    ) : showMessagebaddata === KaggleCredentialsState.Loading ? (
+                        <div className="p-3 d-flex justify-content-center">
+                            <Loading>Logging in ...</Loading>
+                        </div>
                     ) : (
                         <div>Missing Consent</div>
                     )}
