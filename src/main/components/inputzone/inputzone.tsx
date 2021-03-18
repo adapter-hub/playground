@@ -94,10 +94,10 @@ export function Inputzone({
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: ".json" })
 
     const WrongFormat = () => (
-        <p style={{ color: "#d6331a", fontSize: "1.6rem" }}>Your file was corrupted. Please try again :)</p>
+        <p style={{ pointerEvents: "none", color: "#d6331a", fontSize: "1.6rem" }}>Your file was corrupted. Please try again :)</p>
     )
     const InvalidCredentials = () => (
-        <p style={{ color: "#d6331a", fontSize: "1.3rem", textAlign: "center" }}>
+        <p style={{ pointerEvents: "none", color: "#d6331a", fontSize: "1.3rem", textAlign: "center" }}>
             Login unsuccessul. You may need to update your Kaggle.json file.
         </p>
     )
