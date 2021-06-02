@@ -1,0 +1,43 @@
+fragment Task on Task {
+    id
+    name
+    type
+    status
+    output {
+        f1
+        accuracy
+        log
+        files {
+            name
+            url
+        }
+    }
+}
+
+query GetTask($id: Int!) {
+    getTask(id: $id) {
+        ...Task
+    }
+}
+
+mutation AddClusteringTask($input: NewClusteringTaskInput!) {
+    addClusteringTask(input: $input) {
+        name
+    }
+}
+
+mutation AddTrainingTask($input: NewTrainingTaskInput!) {
+    addTrainingTask(input: $input) {
+        name
+    }
+}
+
+mutation AddPredictionTask($input: NewPredictionTaskInput!) {
+    addPredictionTask(input: $input) {
+        name
+    }
+}
+
+mutation DeleteTask($id: Int!) {
+    deleteTask(id: $id)
+}

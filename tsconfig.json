@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "jsx": "react",
+        "esModuleInterop": true,
+        "target": "ES5",
+        "lib": ["DOM", "ES2018"],
+        "resolveJsonModule": true
+    }
+}

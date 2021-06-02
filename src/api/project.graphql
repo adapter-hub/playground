@@ -1,0 +1,34 @@
+fragment ProjectOverview on Project {
+    id
+    name
+    googleSheetId
+}
+
+fragment Project on Project {
+    ...ProjectOverview
+    tasks {
+        id
+    }
+}
+
+query GetProjects {
+    getProjects {
+        ...ProjectOverview
+    }
+}
+
+query GetProject($id: Int!) {
+    getProject(id: $id) {
+        ...Project
+    }
+}
+
+mutation AddProject($input: NewProjectInput!) {
+    addProject(input: $input) {
+        ...ProjectOverview
+    }
+}
+
+mutation DeleteProject($id: Int!) {
+    deleteProject(id: $id)
+}
