@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es2018",
+        "lib": ["es2018", "esnext.asynciterable", "DOM"],
+        "outDir": "dist",
+        "moduleResolution": "Node"
+    }
+}
