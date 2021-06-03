@@ -2,6 +2,7 @@
   "name": "ah-playground-frontend",
   "version": "1.0.0",
   "scripts": {
+    "build": "webpack --mode production --config ./webpack.config.js",
     "generate:adapterhub": "ts-node scripts/generate.ts",
     "generate:api": "graphql-codegen",
     "start": "webpack-dev-server --config ./webpack.config.js"
