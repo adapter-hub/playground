@@ -28,14 +28,14 @@ method = '${ClusteringTaskMethod[method]}' # options: ['kmeans', 'agglomerative'
 # encode texts
 if representation == 'tfidf':
     vectorizer = TfidfVectorizer()
-    encodings = vectorizer.fit_transform(texts)
+    encodings = vectorizer.fit_transform(texts).todense()
 elif representation == 'sbert':
     vectorizer = SentenceTransformer('distilbert-base-nli-mean-tokens')
     encodings = vectorizer.encode(texts)
 else:
     # fallback is tf-idf
     vectorizer = TfidfVectorizer()
-    encodings = vectorizer.fit_transform(texts)
+    encodings = vectorizer.fit_transform(texts).todense()
 
 # perform clustering
 if method == 'kmeans':
