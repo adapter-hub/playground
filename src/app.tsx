@@ -51,7 +51,7 @@ export function ClientApp() {
             new ApolloClient({
                 cache: new InMemoryCache(),
                 link: createUploadLink({
-                    uri: "http://localhost:4000/graphql",
+                    uri: "https://bp2020.ukp.informatik.tu-darmstadt.de:1337/graphql",//"http://localhost:4000/graphql",
                     credentials: "same-origin",
                     headers:
                         credentials != null
