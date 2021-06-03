@@ -126,5 +126,7 @@ export function genDeleteUselessFiles(): string {
 import shutil
 shutil.rmtree('/kaggle/working/runs', ignore_errors=True)
 shutil.rmtree('/kaggle/working/input_adapter_folder', ignore_errors=True)
-shutil.rmtree('/kaggle/working/trained_adapter', ignore_errors=True)`
+shutil.rmtree('/kaggle/working/trained_adapter', ignore_errors=True)
+shutil.rmtree('/kaggle/working/trained_adapter', ignore_errors=True)
+shutil.rmtree('~/.cache/', ignore_errors=True)`
 }
