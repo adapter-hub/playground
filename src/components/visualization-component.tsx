@@ -185,16 +185,30 @@ export function VisualizationResultPage({
         }
     }, [chartRef])
 
-    const allLinesForSelect = useCallback(() => {
-        return listOfAllLabelNames
-            .map((name) => {
-                return {
-                    label: name,
-                    value: name,
-                }
-            })
-            .sort((a, b) => (a.value.length > b.value.length ? 1 : -1))
-    }, [listOfAllLabelNames, selected])
+    const groupByOptions = useMemo(
+        () =>
+            listGroupBy.map((groupBy, index) => (
+                <option key={index} value={groupBy}>
+                    {groupBy}
+                </option>
+            )),
+        [listGroupBy]
+    )
+
+    const visibleClassesOptions = useMemo(
+        () =>
+            listOfAllLabelNames
+                //TODO: testing via include is bad practise since one task name could include another task name (in general the data preparation should be redone and the combined classes should not be concatenated)
+                .filter((label) => groupedBy == null || !label.includes(groupedBy))
+                .sort((a, b) => (a.length > b.length ? 1 : -1))
+                .map((name) => {
+                    return {
+                        label: name,
+                        value: name,
+                    }
+                }),
+        [listOfAllLabelNames, groupedBy]
+    )
 
     const currentChartName = useMemo(() => getChartName(visualizationType), [visualizationType])
 
@@ -229,7 +243,7 @@ export function VisualizationResultPage({
                 </Form.Group>
                 <div className="mt-3">
                     Min. Classfication Confidence
-                    <InfoComponent text="Any value of one input that is less than the minimum confidence is excluded from the graph."/>
+                    <InfoComponent text="Any value of one input that is less than the minimum confidence is excluded from the graph." />
                 </div>
                 <input
                     className="form-control"
@@ -245,24 +259,18 @@ export function VisualizationResultPage({
                     <Form.Label>Group By</Form.Label>
                     <Form.Control
                         placeholder="Group By"
-                        onChange={(e) => {
-                            setGroupBy(e.currentTarget.value as any)
-                        }}
+                        onChange={(e) => setGroupBy(e.currentTarget.value as any)}
                         value={groupedBy}
                         as="select"
                         custom>
-                        {listGroupBy.map((groupBy, index) => (
-                            <option key={index} value={groupBy}>
-                                {groupBy}
-                            </option>
-                        ))}
+                        {groupByOptions}
                     </Form.Control>
                 </Form.Group>
                 <div className="mt-3">Visible Classes</div>
                 <MultiSelect
                     onChange={setSelected}
                     value={selected}
-                    options={allLinesForSelect()}
+                    options={visibleClassesOptions}
                     labelledBy={"Select"}
                 />
             </div>

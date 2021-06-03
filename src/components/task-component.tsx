@@ -66,7 +66,7 @@ export function TaskComponent({
 
     useEffect(() => {
         if (data?.getTask.status === TaskStatus.Queued || data?.getTask.status === TaskStatus.Running) {
-            const interval = window.setInterval(refetch, 3000)
+            const interval = window.setInterval(refetch, 20000)
             return () => window.clearInterval(interval)
         }
     }, [data?.getTask.status, refetch])

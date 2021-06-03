@@ -1,4 +1,3 @@
-import { min } from "rxjs/operators"
 import { Row, Timeintervall } from "./visualization-component"
 import { DateParser } from "./date-parser"
 
