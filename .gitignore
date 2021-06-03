@@ -1,2 +1,7 @@
 node_modules
+prod.env
+ormconfig-prod.env
+dist
+ssl.crt
+ssl.key
 /~/

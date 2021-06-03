@@ -9,13 +9,20 @@ import * as Koa from "koa"
 import { graphqlUploadKoa } from "graphql-upload"
 import { ApolloServer } from "apollo-server-koa"
 import * as cors from "@koa/cors"
+import { createServer as createHttpServer, Server as HttpServer } from "http"
+import { createServer as createHttpsServer, Server as HttpsServer } from "https"
+import { readFile } from "fs/promises"
 import { LocalComputationService } from "./services/local-computation-service"
+
+const { PORT, PROTOCOL } = process.env
+const port = PORT || 80
+var protocol = PROTOCOL || "https"
 
 async function main() {
     const connection = await initializeConnection()
     Container.set(ConnectionToken, connection)
 
-    const computationService = new KaggleComputationService()//new LocalComputationService(connection)
+    const computationService = new KaggleComputationService() //new LocalComputationService(connection)
     Container.set(ComputationServiceToken, computationService)
 
     const typeormLoaderApolloServerPlugin = ApolloServerLoaderPlugin({
@@ -25,7 +32,7 @@ async function main() {
     const schema = await buildSchema({
         resolvers: Resolvers,
         container: Container,
-        authChecker: (data) => computationService.checkAuthentication(data.context.credentials)
+        authChecker: (data) => computationService.checkAuthentication(data.context.credentials),
     })
 
     const app = new Koa().use(
@@ -45,6 +52,15 @@ async function main() {
         })
     )
 
+    let server: HttpServer | HttpsServer
+    if (protocol == "https") {
+        var privateKey = await readFile("ssl.key", "utf8")
+        var certificate = await readFile("ssl.crt", "utf8")
+        server = createHttpsServer({ key: privateKey, cert: certificate }, app.callback())
+    } else {
+        server = createHttpServer(app.callback())
+    }
+
     new ApolloServer({
         schema,
         uploads: false,
@@ -58,10 +74,10 @@ async function main() {
                 return {}
             }
         },
-    }).applyMiddleware({ app })
+    }).applyMiddleware({ app: app as any })
 
-    app.listen(4000, () => {
-        console.log(`🚀  Server ready at http://localhost:4000`)
+    server.listen(port, () => {
+        console.log(`🚀  Server ready at ${PROTOCOL}://0.0.0.0:${port}`)
     })
 }
 
