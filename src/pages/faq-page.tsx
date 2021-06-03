@@ -25,7 +25,7 @@ const DataQandA: QuestionAnswer[] = [
         question: "How to format the 'date' field?",
         answerTop:
             "We accept the most common format like ISO. You can use Google sheets to format your dates. Just follow the steps in the following picture.",
-        imagLink: toAbsoluteStaticFilePath("images/formatDateSheets.png"),
+        imagLink: "images/formatDateSheets.png",
     },
     {
         question: "Some computations are loading endlessly. What to do?",
@@ -40,7 +40,7 @@ const DataQandA: QuestionAnswer[] = [
     {
         question: "How do I need to format my google sheet for sentiment analysis?",
         answerTop: "Format your google sheets similar to this image:",
-        imagLink: toAbsoluteStaticFilePath("images/formatSentAnal.png"),
+        imagLink: "images/formatSentAnal.png",
         answerBottom:
             "A common problem when using our site is that your google sheets document may be loaded with too much data. To work around this problem, simply remove a few columns that should not be analyzed until the error is fixed. Also note that you specify which column to write the results to, so make sure that you don't overwrite any data you want to keep.",
     },

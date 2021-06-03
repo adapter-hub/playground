@@ -10,7 +10,7 @@ export function Toolbar({ logout }: { logout?: () => void }) {
                 <div className="container">
                     <Link className="navbar-brand p-0" to="/">
                         <img
-                            src={toAbsoluteStaticFilePath("images/adapter-bert.png")}
+                            src="images/adapter-bert.png"
                             className="bert"
                             width="28"
                             style={{ marginRight: "15px" }}

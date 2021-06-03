@@ -6,8 +6,8 @@ export function PredictionExplanation() {
         <div>
             <h5>Example for „sentiment prediction</h5>
             <div className="d-flex flex-row p-5">
-                <img className="mr-5" style={{ minWidth: 0 }} src={toAbsoluteStaticFilePath("images/input.png")} />
-                <img style={{ minWidth: 0 }} src={toAbsoluteStaticFilePath("images/with_output.png")} />
+                <img className="mr-5" style={{ minWidth: 0 }} src="images/input.png" />
+                <img style={{ minWidth: 0 }} src="images/with_output.png" />
             </div>
             <p>
                 The left image shows the Google Sheets document before prediction. Each cell in the "Input1" column is a
