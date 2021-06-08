@@ -30,6 +30,9 @@ export class Project {
   googleSheetId!: string;
 
   dateCreated!: Date;
+  
+  @Column()
+  ownerHash!: number
 
   @OneToMany(() => Task, (task) => task.project, { onDelete: "CASCADE" })
   @Field(() => [Task])

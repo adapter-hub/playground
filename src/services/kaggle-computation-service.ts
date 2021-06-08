@@ -6,6 +6,7 @@ import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
 import { ReadStream } from "fs"
 import { FileUpload } from "graphql-upload"
+import { KaggleKernelOutputFile } from "../api/kaggle/models/KaggleKernelOutputFile"
 
 const authenticationCache = new Set<string>()
 
@@ -47,18 +48,8 @@ export class KaggleComputationService implements ComputationService {
 
     async getTaskOutput(credentials: any, task: Task): Promise<TaskOutput | undefined> {
         const { files, log } = await KaggleApi.kernelOutput(credentials, credentials.username, task.kernelId!)
-        const metadataFile = files.find((file) => file.fileName.endsWith("metadata.txt"))
-        if (metadataFile == null) {
-            return undefined
-        }
-        const metadataContent = (await axios.get(metadataFile.url)).data
-        if (typeof metadataContent !== "string") {
-            throw "metadata.txt not string content"
-        }
-        const [sheetsLink, accuracy, f1] = metadataContent.split("\n")
         return {
-            f1: parseFloat(f1),
-            accuracy: parseFloat(accuracy),
+            ...(await this.getMetrics(files)),
             files:
                 files?.map((file) => ({
                     name: file.fileName,
@@ -67,7 +58,37 @@ export class KaggleComputationService implements ComputationService {
             log: Array.isArray(log)
                 ? log.map(({ data, stream_name, time }) => `[${stream_name}]@${time}: ${data}`).join(",")
                 : "",
+            error: await this.getError(files),
         }
+    }
+
+    private async getMetrics(
+        files: Array<KaggleKernelOutputFile>
+    ): Promise<{ f1: number | undefined; accuracy: number | undefined } | undefined> {
+        const metadataFile = files.find((file) => file.fileName.endsWith("metadata.txt"))
+        if (metadataFile == null) {
+            return undefined
+        }
+        const metadataContent = (await axios.get(metadataFile.url)).data
+        if (typeof metadataContent != "string") {
+            throw "metadata.txt not string content"
+        }
+        const [sheetsLink, accuracy, f1] = metadataContent.split("\n")
+        return { f1: tryParseFloat(f1), accuracy: tryParseFloat(accuracy) }
+    }
+
+    private async getError(files: Array<KaggleKernelOutputFile>): Promise<string | undefined> {
+        const errorFile = files.find((file) => file.fileName.endsWith("error.txt"))
+        if (errorFile == null) {
+            return
+        }
+        const errorContent = (await axios.get(errorFile.url)).data
+
+        if (typeof errorContent != "string") {
+            return undefined
+        }
+
+        return errorContent
     }
 
     async startTask(credentials: any, task: Task, code: string, filePath: string | undefined): Promise<void> {
@@ -121,4 +142,9 @@ export class KaggleComputationService implements ComputationService {
 
 function wait(millis: number) {
     return new Promise((resolve) => setTimeout(resolve, millis))
+}
+
+function tryParseFloat(val: string): number | undefined {
+    const result = parseFloat(val)
+    return isNaN(result) ? undefined : result
 }

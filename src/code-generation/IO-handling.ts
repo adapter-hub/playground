@@ -48,10 +48,11 @@ while len(timestamps) < len (user_input_data_1):
     timestamps.append("")`
 }
 
-export function genReadGoldLabels(goldLabelTranslation: string): string {
+export function genReadGoldLabels(goldLabelTranslation: string, roundGoldLabels: boolean): string {
     return `
+${roundGoldLabels ? "import numpy as np" : ""}
 # get the gold labels from the third column in the google sheets from the second row onwards
-user_input_gold_labels = sheet.col_values(3)[1:]
+user_input_gold_labels = ${roundGoldLabels ? "np.round(np.array(sheet.col_values(3)[1:]).astype(np.float)).astype(int)" : "sheet.col_values(3)[1:]"}
 
 # mapping for all accepted labels into uniform representation
 gold_label_translation = ${goldLabelTranslation}`

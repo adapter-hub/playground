@@ -51,7 +51,8 @@ export function generateCode(
         parameter.sheetsDocumentURL,
         inputType,
         goldLabelTranslation,
-        pipeline
+        pipeline,
+        parameter.taskType === "sts" && parameter.trainingDataset === "sts-b"
     )
     let specificSetupCode
     if (parameter.useOwnAdapter) {

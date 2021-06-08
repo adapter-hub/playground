@@ -12,7 +12,8 @@ export function genSharedStartSetup(
     sheetsDocumentURL: string,
     inputType: utils.InputType,
     goldLabelTranslation: string,
-    pipeline: string
+    pipeline: string,
+    roundGoldLabels: boolean
 ): string {
     return `${setup.genKaggleOS()}
 ${setup.genExplainCode()}
@@ -20,7 +21,7 @@ ${setup.genImportSheetConnectionPackages()}
 ${IOHandling.genInitializeSheetConnection(sheetsDocumentURL, sheetsAccessToken)}
 ${IOHandling.genReadInputFromSheet(inputType)}
 ${errorHandling.genFilterInvalidTextInputs(doTraining, inputType)}
-${IOHandling.genReadGoldLabels(goldLabelTranslation)}
+${IOHandling.genReadGoldLabels(goldLabelTranslation, roundGoldLabels)}
 ${errorHandling.genFilterGoldLabels(doTraining, inputType)}
 ${errorHandling.genPossibleTerminate(doTraining)}
 ${setup.genInstallAH()}

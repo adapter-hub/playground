@@ -112,7 +112,7 @@ export function genTerminateForClassification(): string {
     return `
 # program is aborted if nothing valid to classify exists
 if not valid_input_data:
-    file = open("Error.txt", "w")
+    file = open("error.txt", "w")
     file.write("No valid input found.")
     exit()`
 }
@@ -126,7 +126,7 @@ if not valid_gold_label_dict or invalid_gold_labels_row_index:
         error_message = "Couldn´t identify labels at: " + str(invalid_gold_labels_row_index) + "\\n"
     if not valid_gold_label_dict:
         error_message+= "No non empty data with valid label to train with."
-    file = open("Error.txt","w") 
+    file = open("error.txt","w") 
     file.write(error_message)
     exit()`
 }

@@ -66,11 +66,15 @@ export class TaskOutput {
     @Field(() => [File])
     files!: Array<File>
 
-    @Field(() => Float)
-    accuracy!: number
+    @Field(() => Float, { nullable: true })
+    accuracy?: number
 
-    @Field(() => Float)
-    f1!: number
+    @Field(() => Float, { nullable: true })
+    f1?: number
+
+    @Field({ nullable: true })
+    error?: string
+
 }
 
 export enum TaskType {

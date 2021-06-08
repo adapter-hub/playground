@@ -66,7 +66,7 @@ const oneInputClassificationList: string[] = [
     "dialect/arabic",
     "dialect/dialect-arabic",
     "lingaccept/cola",
-    "ner/conll2003",
+    "ner/conll2003"
 ]
 //the function to find out the input type of the task  to use
 //and for that we need taskType and trainingDataset
@@ -112,8 +112,8 @@ const transDicAndGoldLabelTranslationResultList: string[][] = [
         `{"entailment": 2,"neutral": 1, "contradiction" : 0, "LABEL_2" : 2,"LABEL_1" : 1, "LABEL_0" : 0,"0": 0,"1": 1,"2": 2}`,
     ],
     [
-        `"LABEL_5":"5","LABEL_4":"4","LABEL_3":"3","LABEL_2":"2", "LABEL_1":"1"`,
-        `{"5": 5,"4": 4,"3": 3,"2": 2,"1": 1,"LABEL_5" : 5,"LABEL_4" : 4, "LABEL_3" : 3,"LABEL_2" : 2, "LABEL_1" : 1}`,
+        `"LABEL_5":"5","LABEL_4":"4","LABEL_3":"3","LABEL_2":"2", "LABEL_1":"1", "LABEL_0":"0"`,
+        `{0:0, 1:1, 2:2, 3:3, 4:4, 5:5,"5": 5,"4": 4,"3": 3,"2": 2,"1": 1,"0": 0,"LABEL_5" : 5,"LABEL_4" : 4, "LABEL_3" : 3,"LABEL_2" : 2, "LABEL_1" : 1, "LABEL_0" : 0}`,
     ],
     [
         `"LABEL_4":"MSA","LABEL_3":"Maghrebi","LABEL_2":"Levantine","LABEL_1":"Gulf", "LABEL_0":"Egyptian"`,
