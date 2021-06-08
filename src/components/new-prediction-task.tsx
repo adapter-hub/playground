@@ -61,9 +61,12 @@ export function NewPredictionTask({
                 </Form.Group>
             </div>
 
-            {expertMode && (
-                <AdapterhubAdapterConfig config={adapterhubAdapterConfig} setConfig={setAdapterhubAdapterConfig} />
-            )}
+            <AdapterhubAdapterConfig
+                training={false}
+                expertMode={expertMode}
+                config={adapterhubAdapterConfig}
+                setConfig={setAdapterhubAdapterConfig}
+            />
 
             <button className="btn btn-outline-primary mb-3" onClick={() => setShowExplanation(!showExplanation)}>
                 {showExplanation ? "Hide Example" : "Show Example"}

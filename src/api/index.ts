@@ -159,8 +159,9 @@ export type TaskOutput = {
   __typename?: 'TaskOutput';
   log: Scalars['String'];
   files: Array<File>;
-  accuracy: Scalars['Float'];
-  f1: Scalars['Float'];
+  accuracy?: Maybe<Scalars['Float']>;
+  f1?: Maybe<Scalars['Float']>;
+  error?: Maybe<Scalars['String']>;
 };
 
 export enum TaskStatus {
@@ -243,7 +244,7 @@ export type TaskFragment = (
   & Pick<Task, 'id' | 'name' | 'type' | 'status'>
   & { output?: Maybe<(
     { __typename?: 'TaskOutput' }
-    & Pick<TaskOutput, 'f1' | 'accuracy' | 'log'>
+    & Pick<TaskOutput, 'f1' | 'accuracy' | 'log' | 'error'>
     & { files: Array<(
       { __typename?: 'File' }
       & Pick<File, 'name' | 'url'>
@@ -346,6 +347,7 @@ export const TaskFragmentDoc = gql`
     f1
     accuracy
     log
+    error
     files {
       name
       url

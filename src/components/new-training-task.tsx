@@ -85,9 +85,13 @@ export function NewTrainingTask({
                     ))}
                 </Form.Control>
             </Form.Group>
-            {expertMode && (
-                <AdapterhubAdapterConfig config={adapterhubAdapterConfig} setConfig={setAdapterhubAdapterConfig} />
-            )}
+
+            <AdapterhubAdapterConfig
+                training={true}
+                expertMode={expertMode}
+                config={adapterhubAdapterConfig}
+                setConfig={setAdapterhubAdapterConfig}
+            />
 
             {error && <p className="text-danger">{JSON.stringify(error)}</p>}
             <Button

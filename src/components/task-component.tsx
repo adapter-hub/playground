@@ -1,14 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { Button } from "react-bootstrap"
 import { toast } from "react-toastify"
-import {
-    GetProjectDocument,
-    GetTaskDocument,
-    TaskFragment,
-    TaskStatus,
-    useDeleteTaskMutation,
-    useGetTaskQuery,
-} from "../api"
+import { GetProjectDocument, TaskFragment, TaskStatus, useDeleteTaskMutation, useGetTaskQuery } from "../api"
 import { LoadingComponent } from "./loading-component"
 
 function TaskOutputComponent({ task }: { task: TaskFragment }) {
@@ -17,8 +10,9 @@ function TaskOutputComponent({ task }: { task: TaskFragment }) {
     }
     return (
         <div className="d-flex flex-column">
-            <h5 className="mt-2">Accuracy: {task.output.accuracy}</h5>
-            <h5 className="mt-2">F1: {task.output.f1}</h5>
+            {task.output.accuracy != null && <h5 className="mt-2">Accuracy: {task.output.accuracy}</h5>}
+            {task.output.f1 != null && <h5 className="mt-2">F1: {task.output.f1}</h5>}
+            {task.output.error && <h5 className="mt-2 text-danger">{task.output.error}</h5>}
             <h4 className="mt-2">Files</h4>
             <ul>
                 <li>
@@ -99,7 +93,8 @@ export function TaskComponent({
                         {loading && <LoadingComponent>Loading</LoadingComponent>}
                         {data != null && (
                             <div className="d-flex flex-row align-items-center">
-                                {data.getTask.status === TaskStatus.Complete && (
+                                {(data.getTask.status === TaskStatus.Error ||
+                                    data.getTask.status === TaskStatus.Complete) && (
                                     <i
                                         className={`ml-1 mr-3 fa ${
                                             isMinimized ? "fa-angle-right" : "fa-angle-down"
@@ -122,9 +117,8 @@ export function TaskComponent({
                             <i className="fa fa-trash" />
                         </Button>
                     </div>
-                    {data?.getTask.status === TaskStatus.Complete && !isMinimized && (
-                        <TaskOutputComponent key="task-output" task={data.getTask} />
-                    )}
+                    {(data?.getTask.status === TaskStatus.Error || data?.getTask.status === TaskStatus.Complete) &&
+                        !isMinimized && <TaskOutputComponent key="task-output" task={data.getTask} />}
                 </div>
             </div>
         </div>

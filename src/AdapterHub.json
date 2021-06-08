@@ -1,9 +1,4 @@
 [
-	{ "task": "dialect", "name": "Dialect Detection", "defaultDatasetName": "", "datasets": [
-		{ "dataset": "arabic", "name": "ArabicDialect", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "aubmindlab/bert-base-arabert", "modelTransformerClass": "BertModelWithHeads", "groupname": "mapmeld", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]}
-	]},
 	{ "task": "sentiment", "name": "Sentiment Analysis", "defaultDatasetName": "", "datasets": [
 		{ "dataset": "hinglish-twitter-sentiment", "name": "Hinglish Sentiment", "defaultAdapterIdentifer": "", "adapters": [
 			{ "type": "bert", "modelName": "bert-base-multilingual-uncased", "modelTransformerClass": "BertModelWithHeads", "groupname": "nirantk", "nlpTaskType": "text_task", "architecture": "pfeiffer" }

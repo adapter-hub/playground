@@ -190,7 +190,7 @@ export class GenerateUtil {
             task === "sentiment" ||
             task === "nli" ||
             task === "lingaccept" ||
-            task === "dialect" ||
+            //task === "dialect" ||
             task === "argument" ||
             task === "sts"
         )

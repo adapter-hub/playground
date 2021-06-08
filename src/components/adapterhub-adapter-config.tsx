@@ -113,9 +113,13 @@ function getDefaultAdapterhubAdapterConfigFromNLPTaskType(taskType: NLPTaskType)
 export function AdapterhubAdapterConfig({
     config,
     setConfig,
+    expertMode,
+    training
 }: {
     config: AdapterhubAdapterConfig
     setConfig: (config: AdapterhubAdapterConfig) => void
+    expertMode: boolean
+    training: boolean
 }) {
     const setNLPTaskType = useCallback(
         (taskType: NLPTaskType) => {
@@ -153,31 +157,9 @@ export function AdapterhubAdapterConfig({
 
     return (
         <>
-            <ul className="nav nav-tabs mb-3">
-                <li className="nav-item">
-                    <a
-                        onClick={() => setConfig(getDefaultAdapterhubAdapterConfigFromNLPTaskType(config.nlpTaskType))}
-                        className={!config.ownAdapter ? "nav-link active" : "nav-link"}
-                        aria-current="page"
-                        style={{ cursor: "pointer" }}>
-                        Config
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a
-                        onClick={() =>
-                            setConfig({ ownAdapter: true, adapterConfig: undefined, nlpTaskType: config.nlpTaskType })
-                        }
-                        className={config.ownAdapter ? "nav-link active" : "nav-link"}
-                        aria-current="page"
-                        style={{ cursor: "pointer" }}>
-                        Upload Adapter
-                    </a>
-                </li>
-            </ul>
             <Form>
                 <Form.Group>
-                    <Form.Label>Prediction Task Type</Form.Label>
+                    <Form.Label>{training ? "Training" : "Prediction"} Task Type</Form.Label>
                     <Form.Control
                         onChange={(event) =>
                             setNLPTaskType(findFirstOrDefault(Tasks, (t) => t.name === event.currentTarget.value))
@@ -190,62 +172,93 @@ export function AdapterhubAdapterConfig({
                         ))}
                     </Form.Control>
                 </Form.Group>
-
-                {config.ownAdapter
-                    ? [
-                          <p key="warning" className="font-weight-bold text-warning">
-                              Please make sure your adapter was trained on the matching task!
-                          </p>,
-                          <AdapterInputzone
-                              key="input"
-                              adapterConfig={config.adapterConfig}
-                              setAdapterConfig={(adapterConfig) =>
-                                  setConfig({ ownAdapter: true, adapterConfig, nlpTaskType: config.nlpTaskType })
-                              }
-                          />,
-                      ]
-                    : [
-                          <Form.Group key={"dataset"}>
-                              <Form.Label>Dataset</Form.Label>
-                              <Form.Control
-                                  onChange={(event) =>
-                                      setNLPDataset(
-                                          findFirstOrDefault(
-                                              config.nlpTaskType?.datasets,
-                                              (t) => t.name === event.currentTarget.value
-                                          )
-                                      )
-                                  }
-                                  value={config.nlpDataset?.name}
-                                  as="select"
-                                  custom>
-                                  {config.nlpTaskType?.datasets.map((dataset, index) => (
-                                      <option key={index}>{dataset.name}</option>
-                                  ))}
-                              </Form.Control>
-                          </Form.Group>,
-
-                          <Form.Group key="adapter">
-                              <Form.Label>Adapter</Form.Label>
-                              <Form.Control
-                                  onChange={(event) =>
-                                      setNLPAdapter(
-                                          findFirstOrDefault(
-                                              config.nlpDataset.adapters,
-                                              (t) => getAdapterIdentifier(t) === event.currentTarget.value
-                                          )
-                                      )
-                                  }
-                                  value={getAdapterIdentifier(config.nlpAdapter)}
-                                  as="select"
-                                  custom>
-                                  {config.nlpDataset.adapters.map((adapter, index) => (
-                                      <option key={index}>{getAdapterIdentifier(adapter)}</option>
-                                  ))}
-                              </Form.Control>
-                          </Form.Group>,
-                      ]}
             </Form>
+            {expertMode && [
+                <ul className="nav nav-tabs mb-3">
+                    <li className="nav-item">
+                        <a
+                            onClick={() =>
+                                setConfig(getDefaultAdapterhubAdapterConfigFromNLPTaskType(config.nlpTaskType))
+                            }
+                            className={!config.ownAdapter ? "nav-link active" : "nav-link"}
+                            aria-current="page"
+                            style={{ cursor: "pointer" }}>
+                            Config
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            onClick={() =>
+                                setConfig({
+                                    ownAdapter: true,
+                                    adapterConfig: undefined,
+                                    nlpTaskType: config.nlpTaskType,
+                                })
+                            }
+                            className={config.ownAdapter ? "nav-link active" : "nav-link"}
+                            aria-current="page"
+                            style={{ cursor: "pointer" }}>
+                            Upload Adapter
+                        </a>
+                    </li>
+                </ul>,
+                <Form>
+                    {config.ownAdapter
+                        ? [
+                              <p key="warning" className="font-weight-bold text-warning">
+                                  Please make sure your adapter was trained on the matching task!
+                              </p>,
+                              <AdapterInputzone
+                                  key="input"
+                                  adapterConfig={config.adapterConfig}
+                                  setAdapterConfig={(adapterConfig) =>
+                                      setConfig({ ownAdapter: true, adapterConfig, nlpTaskType: config.nlpTaskType })
+                                  }
+                              />,
+                          ]
+                        : [
+                              <Form.Group key={"dataset"}>
+                                  <Form.Label>Dataset</Form.Label>
+                                  <Form.Control
+                                      onChange={(event) =>
+                                          setNLPDataset(
+                                              findFirstOrDefault(
+                                                  config.nlpTaskType?.datasets,
+                                                  (t) => t.name === event.currentTarget.value
+                                              )
+                                          )
+                                      }
+                                      value={config.nlpDataset?.name}
+                                      as="select"
+                                      custom>
+                                      {config.nlpTaskType?.datasets.map((dataset, index) => (
+                                          <option key={index}>{dataset.name}</option>
+                                      ))}
+                                  </Form.Control>
+                              </Form.Group>,
+
+                              <Form.Group key="adapter">
+                                  <Form.Label>Adapter</Form.Label>
+                                  <Form.Control
+                                      onChange={(event) =>
+                                          setNLPAdapter(
+                                              findFirstOrDefault(
+                                                  config.nlpDataset.adapters,
+                                                  (t) => getAdapterIdentifier(t) === event.currentTarget.value
+                                              )
+                                          )
+                                      }
+                                      value={getAdapterIdentifier(config.nlpAdapter)}
+                                      as="select"
+                                      custom>
+                                      {config.nlpDataset.adapters.map((adapter, index) => (
+                                          <option key={index}>{getAdapterIdentifier(adapter)}</option>
+                                      ))}
+                                  </Form.Control>
+                              </Form.Group>,
+                          ]}
+                </Form>,
+            ]}
         </>
     )
 }
