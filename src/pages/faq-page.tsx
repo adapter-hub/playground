@@ -49,7 +49,6 @@ const DataQandA: QuestionAnswer[] = [
 export function Faqpage() {
     return (
         <div>
-            <Toolbar />
             <div className="jumbotron jumbotron-fluid d-flex align-items-center bg-primary justify-content-center p-4">
                 <h2 className="text-white">Frequently Asked Questions</h2>
             </div>

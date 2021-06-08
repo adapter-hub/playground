@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { Toolbar } from "./components/toolbar"
 import { FooterComponent } from "./components/footer-component"
 import { Faqpage } from "./pages/faq-page"
@@ -51,7 +51,7 @@ export function ClientApp() {
             new ApolloClient({
                 cache: new InMemoryCache(),
                 link: createUploadLink({
-                    uri: "https://bp2020.ukp.informatik.tu-darmstadt.de:1337/graphql",//"http://localhost:4000/graphql",
+                    uri: "https://bp2020.ukp.informatik.tu-darmstadt.de:1337/graphql", //"http://localhost:4000/graphql",
                     credentials: "same-origin",
                     headers:
                         credentials != null
@@ -71,6 +71,52 @@ export function ClientApp() {
 }
 
 export function App({ setCredentials }: { setCredentials: (credentials: KaggleCredentials | undefined) => void }) {
+    const logout = useCallback(() => {
+        deleteCredentials()
+        setCredentials(undefined)
+        toast.success("successfully logged out")
+    }, [setCredentials])
+    return (
+        <div className="overflow-hidden">
+            <ToastContainer />
+            <div className="w-100 bg-secondary p-2 justify-content-end d-flex px-3 align-items-center">
+                <span className="text-light">Beta Version</span>
+                <i className="ml-2 text-light fa fa-info-circle"></i>
+            </div>
+            <Router>
+                <Switch>
+                    <Route
+                        path={"/projects/:id"}
+                        render={(props) => (
+                            <AuthWrapper setCredentials={setCredentials}>
+                                <Toolbar logout={logout} />
+                                <ProjectPage {...props} />
+                            </AuthWrapper>
+                        )}></Route>
+                    <Route path="/projects">
+                        <AuthWrapper setCredentials={setCredentials}>
+                            <Toolbar logout={logout} />
+                            <ProjectListPage />
+                        </AuthWrapper>
+                    </Route>
+                    <Route path="/faq">
+                        <Toolbar />
+                        <Faqpage />
+                    </Route>
+                    <Route path="">
+                        <Redirect to="/projects" />
+                    </Route>
+                </Switch>
+            </Router>
+            <FooterComponent />
+        </div>
+    )
+}
+
+export function AuthWrapper({
+    children,
+    setCredentials,
+}: PropsWithChildren<{ setCredentials: (credentials: KaggleCredentials | undefined) => void }>) {
     const { data, loading } = useCheckAutenticationQuery({
         onCompleted: (data) => {
             if (data.checkAuthentication) {
@@ -80,11 +126,7 @@ export function App({ setCredentials }: { setCredentials: (credentials: KaggleCr
             }
         },
     })
-    const logout = useCallback(() => {
-        deleteCredentials()
-        setCredentials(undefined)
-        toast.success("successfully logged out")
-    }, [setCredentials])
+
     const login = useCallback(
         (credentials: KaggleCredentials, rememberMe: boolean) => {
             saveCredentials(credentials, rememberMe)
@@ -92,35 +134,16 @@ export function App({ setCredentials }: { setCredentials: (credentials: KaggleCr
         },
         [setCredentials]
     )
-    return (
-        <div className="overflow-hidden">
-            <ToastContainer />
-            <div className="w-100 bg-secondary p-2 justify-content-end d-flex px-3 align-items-center">
-                <span className="text-light">Beta Version</span>
-                <i className="ml-2 text-light fa fa-info-circle"></i>
+    if (loading) {
+        return <LoadingComponent>Logging In</LoadingComponent>
+    } else if (data?.checkAuthentication) {
+        return <div>{children}</div>
+    } else {
+        return (
+            <div>
+                <Toolbar />
+                <LoginPage login={login} />
             </div>
-            <Router>
-                <Toolbar logout={logout} />
-                {loading ? (
-                    <LoadingComponent>Logging In</LoadingComponent>
-                ) : data?.checkAuthentication ? (
-                    <Switch>
-                        <Route path={"/projects/:id"} render={(props) => <ProjectPage {...props} />}></Route>
-                        <Route path="/projects">
-                            <ProjectListPage />
-                        </Route>
-                        <Route path="/faq">
-                            <Faqpage />
-                        </Route>
-                        <Route path="">
-                            <Redirect to="/projects" />
-                        </Route>
-                    </Switch>
-                ) : (
-                    <LoginPage login={login} />
-                )}
-            </Router>
-            <FooterComponent />
-        </div>
-    )
+        )
+    }
 }
