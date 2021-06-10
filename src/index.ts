@@ -12,7 +12,6 @@ import * as cors from "@koa/cors"
 import { createServer as createHttpServer, Server as HttpServer } from "http"
 import { createServer as createHttpsServer, Server as HttpsServer } from "https"
 import { readFile } from "fs/promises"
-import { LocalComputationService } from "./services/local-computation-service"
 
 const { PORT, PROTOCOL } = process.env
 const port = PORT || 80

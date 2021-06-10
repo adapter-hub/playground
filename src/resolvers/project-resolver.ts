@@ -4,7 +4,7 @@ import { KeyType, NewProjectInput, Project } from "../entities"
 import { Inject } from "typedi"
 import { GraphQLBoolean } from "graphql"
 import { ConnectionToken } from "../typeorm"
-import { checkProjectAccess, hashCredentials } from "."
+import { checkProjectAccess } from "."
 
 @Resolver((of) => Project)
 export class ProjectResolver {
@@ -18,7 +18,7 @@ export class ProjectResolver {
             identifiers: [id],
         } = await this.connection.getRepository(Project).insert({
             ...insert,
-            ownerHash: hashCredentials(credentials),
+            ownerUsername: credentials.username
         })
         return await this.connection.getRepository(Project).findOne(id)
     }
@@ -39,7 +39,7 @@ export class ProjectResolver {
     public async getProjects(@Ctx() { credentials }: { credentials?: any }) {
         const projects = await this.connection
             .getRepository(Project)
-            .find({ where: { ownerHash: hashCredentials(credentials) } })
+            .find({ where: { ownerUsername: credentials.username } })
         return projects
     }
 

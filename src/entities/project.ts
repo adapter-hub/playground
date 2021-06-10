@@ -32,7 +32,7 @@ export class Project {
   dateCreated!: Date;
   
   @Column()
-  ownerHash!: number
+  ownerUsername!: string
 
   @OneToMany(() => Task, (task) => task.project, { onDelete: "CASCADE" })
   @Field(() => [Task])

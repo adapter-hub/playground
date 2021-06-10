@@ -8,12 +8,16 @@ import { ReadStream } from "fs"
 import { FileUpload } from "graphql-upload"
 import { KaggleKernelOutputFile } from "../api/kaggle/models/KaggleKernelOutputFile"
 
-const authenticationCache = new Set<string>()
+const authenticationCache = new Map<string, number>()
 
 export class KaggleComputationService implements ComputationService {
     async checkAuthentication(credentials: any): Promise<boolean> {
-        if (authenticationCache.has(credentials.username)) {
-            return true
+        const authenticationDate = authenticationCache.get(credentials.username)
+        if (authenticationDate != null) {
+            //15 minutes expire time
+            if (new Date().getTime() - authenticationDate <= 15 * 60 * 1000) {
+                return true
+            }
         }
         // send random status request and see if response is: 401 unauthorized
         try {
@@ -23,7 +27,7 @@ export class KaggleComputationService implements ComputationService {
                 return false
             } else if (error.response.status === 404) {
                 //kernel "test" does not exist but user is authenticated
-                authenticationCache.add(credentials.username)
+                authenticationCache.set(credentials.username, new Date().getTime())
                 return true
             } else {
                 throw error
