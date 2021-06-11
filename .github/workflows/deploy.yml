@@ -25,8 +25,8 @@ jobs:
 #            - name: Test
 #              run: npm run test
 
-            - name: Generate AdapterHub Data
-              run: npm run generate:adapterhub
+#            - name: Generate AdapterHub Data
+#              run: npm run generate:adapterhub
 
             - name: Build
               run: npm run build

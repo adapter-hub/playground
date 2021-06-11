@@ -1,119 +1,779 @@
 [
-	{ "task": "sentiment", "name": "Sentiment Analysis", "defaultDatasetName": "", "datasets": [
-		{ "dataset": "hinglish-twitter-sentiment", "name": "Hinglish Sentiment", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-multilingual-uncased", "modelTransformerClass": "BertModelWithHeads", "groupname": "nirantk", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]},
-		{ "dataset": "sst-2", "name": "SST-2", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-base", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]},
-		{ "dataset": "imdb", "name": "IMDb", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]},
-		{ "dataset": "rotten_tomatoes", "name": "Rotten Tomatoes Movie Reviews", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]}
-	]},
-	{ "task": "lingaccept", "name": "Linguistic Acceptability", "defaultDatasetName": "", "datasets": [
-		{ "dataset": "cola", "name": "CoLA", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-base", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-base", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]}
-	]},
-	{ "task": "nli", "name": "Natural Language Inference", "defaultDatasetName": "", "datasets": [
-		{ "dataset": "multinli", "name": "MultiNLI", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]},
-		{ "dataset": "qnli", "name": "QNLI", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-base", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-base", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]},
-		{ "dataset": "rte", "name": "RTE", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]},
-		{ "dataset": "cb", "name": "CommitmentBank", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]}
-	]},
-	{ "task": "sts", "name": "Semantic Textual Similarity", "defaultDatasetName": "", "datasets": [
-		{ "dataset": "mrpc", "name": "MRPC", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-base", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]},
-		{ "dataset": "qqp", "name": "QQP", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]},
-		{ "dataset": "sts-b", "name": "STS-B", "defaultAdapterIdentifer": "", "adapters": [
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bert", "modelName": "bert-base-uncased", "modelTransformerClass": "BertForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "distilbert", "modelName": "distilbert-base-uncased", "modelTransformerClass": "DistilBertModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "bart", "modelName": "facebook/bart-base", "modelTransformerClass": "BartModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "gpt2", "modelName": "gpt2", "modelTransformerClass": "GPT2ForSequenceClassification", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-base", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-base", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "houlsby" },
-			{ "type": "roberta", "modelName": "roberta-large", "modelTransformerClass": "RobertaModelWithHeads", "groupname": "ukp", "nlpTaskType": "text_task", "architecture": "pfeiffer" }
-		]}
-	]}
+    {
+        "task": "sentiment",
+        "name": "Sentiment Analysis",
+        "defaultDatasetName": "",
+        "datasets": [
+            {
+                "dataset": "sst-2",
+                "name": "SST-2",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-base",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            },
+            {
+                "dataset": "imdb",
+                "name": "IMDb",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            },
+            {
+                "dataset": "rotten_tomatoes",
+                "name": "Rotten Tomatoes Movie Reviews",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "task": "lingaccept",
+        "name": "Linguistic Acceptability",
+        "defaultDatasetName": "",
+        "datasets": [
+            {
+                "dataset": "cola",
+                "name": "CoLA",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-base",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-base",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "task": "nli",
+        "name": "Natural Language Inference",
+        "defaultDatasetName": "",
+        "datasets": [
+            {
+                "dataset": "multinli",
+                "name": "MultiNLI",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            },
+            {
+                "dataset": "qnli",
+                "name": "QNLI",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-base",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-base",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            },
+            {
+                "dataset": "rte",
+                "name": "RTE",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            },
+            {
+                "dataset": "cb",
+                "name": "CommitmentBank",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "task": "sts",
+        "name": "Semantic Textual Similarity",
+        "defaultDatasetName": "",
+        "datasets": [
+            {
+                "dataset": "mrpc",
+                "name": "MRPC",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-base",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            },
+            {
+                "dataset": "qqp",
+                "name": "QQP",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            },
+            {
+                "dataset": "sts-b",
+                "name": "STS-B",
+                "defaultAdapterIdentifer": "",
+                "adapters": [
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bert",
+                        "modelName": "bert-base-uncased",
+                        "modelTransformerClass": "BertForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "distilbert",
+                        "modelName": "distilbert-base-uncased",
+                        "modelTransformerClass": "DistilBertModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "bart",
+                        "modelName": "facebook/bart-base",
+                        "modelTransformerClass": "BartModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "gpt2",
+                        "modelName": "gpt2",
+                        "modelTransformerClass": "GPT2ForSequenceClassification",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-base",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-base",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "houlsby"
+                    },
+                    {
+                        "type": "roberta",
+                        "modelName": "roberta-large",
+                        "modelTransformerClass": "RobertaModelWithHeads",
+                        "groupname": "ukp",
+                        "nlpTaskType": "text_task",
+                        "architecture": "pfeiffer"
+                    }
+                ]
+            }
+        ]
+    }
 ]
