@@ -96,8 +96,8 @@ const transDicAndGoldLabelTranslationResultList: string[][] = [
         `{"positive": 1, "negative" : 0, "LABEL_1" : 1, "LABEL_0" : 0, "0" : 0, "1" : 1}`,
     ],
     [
-        `"LABEL_1":"equivalent", "LABEL_0":"inequivalent"`,
-        `{"equivalent": 1, "inequivalent" : 0, "LABEL_1" : 1, "LABEL_0" : 0, "0" : 0, "1" : 1}`,
+        `"LABEL_1":"equivalent", "LABEL_0":"inequivalent","not_equivalent":"inequivalent","equivalent":"equivalent"`,
+        `{"not_equivalent": 0, "equivalent": 1, "inequivalent" : 0, "LABEL_1" : 1, "LABEL_0" : 0, "0" : 0, "1" : 1}`,
     ],
     [
         `"LABEL_2":"positive","LABEL_1":"neutral", "LABEL_0":"negative"`,
