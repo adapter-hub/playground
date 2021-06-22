@@ -108,7 +108,7 @@ const transDicAndGoldLabelTranslationResultList: string[][] = [
         `{"supporting": 2,"not an argument": 1, "attacking" : 0, "LABEL_2" : 2,"LABEL_1" : 1, "LABEL_0" : 0,"0": 0,"1": 1,"2": 2}`,
     ],
     [
-        `"LABEL_2":"entailment","LABEL_1":"neutral", "LABEL_0":"contradiction"`,
+        `"LABEL_2":"entailment","LABEL_1":"neutral", "LABEL_0":"contradiction","contradiction":"contradiction","entailment":"entailment","neutral":"neutral"`,
         `{"entailment": 2,"neutral": 1, "contradiction" : 0, "LABEL_2" : 2,"LABEL_1" : 1, "LABEL_0" : 0,"0": 0,"1": 1,"2": 2}`,
     ],
     [

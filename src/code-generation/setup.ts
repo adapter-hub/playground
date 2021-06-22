@@ -13,7 +13,7 @@ os.system('pip install gspread oauth2client')`
 export function genInstallAH(): string {
     return `
 #------------------------------------------------------------PART 2------------------------------------------------------------
-os.system('pip install git+https://github.com/adapter-hub/adapter-transformers.git')`
+os.system('pip install git+https://github.com/adapter-hub/adapter-transformers.git@develop')`
 }
 
 export function genExplainCode(): string {
@@ -38,7 +38,7 @@ import json`
 
 export function genImportAHPackages(doTraining: boolean, pipeline: string, modelTransformersClass: string): string {
     const sharedRemainingPackages = `import torch
-from transformers import AutoTokenizer,AdapterConfig,${modelTransformersClass}
+from transformers import AutoTokenizer,AdapterConfig,AutoModelWithHeads
 from transformers import ${pipeline}`
 
     if (doTraining) {
@@ -58,7 +58,7 @@ tokenizer = AutoTokenizer.from_pretrained('${modelName}')`
 export function genLoadModel(modelName: string, modelTransformersClass: string): string {
     return `
 # load pre-trained model from Huggingface
-model = ${modelTransformersClass}.from_pretrained('${modelName}')`
+model = AutoModelWithHeads.from_pretrained('${modelName}')`
 }
 
 export function genAdapterArchitecture(adapterArchitecture: string): string {
