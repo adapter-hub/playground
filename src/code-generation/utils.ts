@@ -81,7 +81,8 @@ export function getInputType(taskType: string, trainingDataset: string): InputTy
 //a list of lists and for each list there is transDic and a GoldLabelTranslation
 const transDicAndGoldLabelTranslationList: string[][] = [
     ["sentiment/imdb", "sentiment/rotten_tomatoes", "sentiment/sst-2", "nli/qnli", "nli/rte", "lingaccept/cola"],
-    ["sts/mrpc", "sts/qqp", "sts/stackexchange"],
+    ["sts/mrpc", "sts/stackexchange"],
+    ["sts/qqp"],
     ["sentiment/hinglish-twitter-sentiment", "sentiment/hinglish"],
     ["argument/ukpsent"],
     ["nli/cb", "nli/super_glue_cb", "nli/multinli", "nli/mnli"],
@@ -98,6 +99,10 @@ const transDicAndGoldLabelTranslationResultList: string[][] = [
     [
         `"LABEL_1":"equivalent", "LABEL_0":"inequivalent","not_equivalent":"inequivalent","equivalent":"equivalent"`,
         `{"not_equivalent": 0, "equivalent": 1, "inequivalent" : 0, "LABEL_1" : 1, "LABEL_0" : 0, "0" : 0, "1" : 1}`,
+    ],
+    [
+        `"LABEL_1":"duplicate", "LABEL_0":"not_duplicate","not_duplicate":"not_duplicate","duplicate":"duplicate"`,
+        `{"not_duplicate": 0, "duplicate": 1, "LABEL_1" : 1, "LABEL_0" : 0, "0" : 0, "1" : 1}`,
     ],
     [
         `"LABEL_2":"positive","LABEL_1":"neutral", "LABEL_0":"negative"`,
