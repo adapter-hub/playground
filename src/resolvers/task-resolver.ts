@@ -47,7 +47,7 @@ export class TaskResolver {
         await checkProjectAccess(this.connection, user, input.projectId)
         const project = await this.connection.getRepository(Project).findOneOrFail(input.projectId)
         const code = generateClusteringCode(
-            this.computationService.platformType,
+            this.computationService.getPlatformType(user),
             input,
             spreadSheetIdToLink(project.googleSheetId),
             sheetsAccessToken
@@ -73,7 +73,7 @@ export class TaskResolver {
             const file = await input.file
             filePath = await this.computationService.uploadFile(user, file)
         }
-        const code = generateCode(this.computationService.platformType, {
+        const code = generateCode(this.computationService.getPlatformType(user), {
             doTraining: true,
             ...input,
             ...assureAdapterConfiguration(input, filePath),
@@ -101,7 +101,7 @@ export class TaskResolver {
             const file = await input.file
             filePath = await this.computationService.uploadFile(user, file)
         }
-        const code = generateCode(this.computationService.platformType, {
+        const code = generateCode(this.computationService.getPlatformType(user), {
             doTraining: false,
             ...input,
             ...assureAdapterConfiguration(input, filePath),

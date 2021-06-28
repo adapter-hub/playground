@@ -1,6 +1,6 @@
 import { FileUpload } from "graphql-upload"
 import { Task, TaskStatus, TaskOutput } from "../entities"
-import { ComputationService, User } from "./computation-service"
+import { ComputationService, PlatformType, User } from "./computation-service"
 import { KaggleComputationService } from "./kaggle-computation-service"
 import { LocalComputationService } from "./local-computation-service"
 
@@ -9,6 +9,14 @@ export class HybridComputationService implements ComputationService {
         private kaggleComputationService: KaggleComputationService,
         private localComputationService: LocalComputationService
     ) {}
+
+    getPlatformType(user: User): PlatformType {
+        if (user.type === "kaggle") {
+            return "kaggle"
+        } else {
+            return "local"
+        }
+    }
 
     async checkAuthentication(credentials: any): Promise<User | undefined> {
         const localUser = await this.localComputationService.checkAuthentication(credentials)

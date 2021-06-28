@@ -1,7 +1,7 @@
 import { KaggleApi } from "../api/kaggle"
 import { KaggleKernelPushRequest } from "../api/kaggle/models/KaggleKernelPushRequest"
 import { Task, TaskStatus, TaskOutput } from "../entities"
-import { ComputationService, User } from "./computation-service"
+import { ComputationService, PlatformType, User } from "./computation-service"
 import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
 import { ReadStream } from "fs"
@@ -11,6 +11,11 @@ import { KaggleKernelOutputFile } from "../api/kaggle/models/KaggleKernelOutputF
 const authenticationCache = new Map<string, number>()
 
 export class KaggleComputationService implements ComputationService {
+
+    getPlatformType(user: User): PlatformType {
+        return "kaggle"
+    }
+    
     async checkAuthentication(credentials: any): Promise<User | undefined> {
         const user: User = { type: "kaggle", key: credentials.key, username: credentials.username }
         const authenticationDate = authenticationCache.get(credentials.username)

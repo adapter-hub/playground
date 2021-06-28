@@ -16,7 +16,7 @@ export type PlatformType = "local" | "kaggle"
 
 export interface ComputationService {
     
-    readonly platformType: PlatformType
+    getPlatformType(user: User): PlatformType
 
     checkAuthentication(credentials: any): Promise<User | undefined>
 

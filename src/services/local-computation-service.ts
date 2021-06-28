@@ -1,5 +1,5 @@
 import { mkdir, readdir, stat, readFile } from "fs/promises"
-import { ComputationService, User } from "."
+import { ComputationService, PlatformType, User } from "."
 import { Task, TaskStatus, TaskOutput } from "../entities"
 import { PythonShell } from "python-shell"
 import { Connection } from "typeorm"
@@ -11,6 +11,10 @@ import { v4 as uuidv4 } from "uuid"
 
 export class LocalComputationService implements ComputationService {
     constructor(private connection: Connection) {}
+
+    getPlatformType(user: User): PlatformType {
+        return "local"
+    }
 
     private getTaskPath(task: Task): string {
         return resolve(__dirname, `../../files/tasks/${task.id}`)
