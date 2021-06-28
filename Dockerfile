@@ -7,4 +7,4 @@ RUN npm run build
 RUN apt update
 RUN apt install default-mysql-server -y
 RUN service mysql start; mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'password'; CREATE DATABASE ah_playground;"; npm run linux-typeorm-dev-sync
-CMD service mysql start;
+CMD service mysql start; npm run start-dev

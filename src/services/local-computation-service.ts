@@ -82,7 +82,7 @@ export class LocalComputationService implements ComputationService {
                 cwd: path,
             },
             (error) => {
-                task.log = output
+                task.log = output.slice(-1024)
                 if (error) {
                     task.status = TaskStatus.Error
                 } else {
