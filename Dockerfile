@@ -6,6 +6,5 @@ RUN npm install
 RUN npm run build
 RUN apt update
 RUN apt install default-mysql-server -y
-RUN systemctl enable mysql
-RUN npm run linux-typeorm-dev-sync
-CMD npm run start-dev
+RUN update-rc.d mysql defaults
+EXPOSE 4000
