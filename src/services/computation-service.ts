@@ -1,14 +1,23 @@
 import { Task, TaskStatus, TaskOutput } from "../entities"
 import { FileUpload } from "graphql-upload"
 
+export type User = {
+    type: "kaggle"
+    username: string
+    key: string
+} | {
+    username: string
+    type: "local"
+}
+
 export interface ComputationService {
-    checkAuthentication(credentials: any): Promise<boolean>
+    checkAuthentication(credentials: any): Promise<User | undefined>
 
-    getTaskStatus(credentials: any, task: Task): Promise<TaskStatus>
+    getTaskStatus(user: User, task: Task): Promise<TaskStatus>
 
-    getTaskOutput(credentials: any, task: Task): Promise<TaskOutput | undefined>
+    getTaskOutput(user: User, task: Task): Promise<TaskOutput | undefined>
 
-    startTask(credentials: any, task: Task, code: string, file: string | undefined): Promise<void>
+    startTask(user: User, task: Task, code: string, file: string | undefined): Promise<void>
 
-    uploadFile(credentials: any, file: FileUpload): Promise<string>
+    uploadFile(user: User, file: FileUpload): Promise<string>
 }

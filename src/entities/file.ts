@@ -16,29 +16,3 @@ export class File {
     url!: string
 
 }
-
-@Entity()
-@ObjectType()
-export class DatabaseFile extends File {
-
-    @PrimaryGeneratedColumn()
-    id!: KeyType
-
-    @Column()
-    @Field()
-    @Filter("like")
-    name!: string
-
-    @Column()
-    @Field()
-    @Filter("like")
-    url!: string
-    
-    @Column()
-    taskId!: KeyType
-
-    @ManyToOne(() => Task, (task) => task.files, { onDelete: "CASCADE" })
-    @JoinColumn({ name: "taskId" })
-    task!: Task
-
-}

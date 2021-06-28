@@ -57,7 +57,7 @@ export function generateCode(
     let specificSetupCode
     if (parameter.useOwnAdapter) {
         specificSetupCode = codeGen.genLoadUserAdapter(
-            `/kaggle/input/${parameter.zipFileName.split("/")[1]}/default`,
+            parameter.zipFileName,
             parameter.taskType
         )
     } else {

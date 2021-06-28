@@ -3,10 +3,10 @@ import { Filter, generateFilterType } from "../filter"
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany, RelationId } from "typeorm"
 import { KeyType } from "."
 import { Project } from "./project"
-import { DatabaseFile, File } from "./file"
 import { TypeormLoader } from "type-graphql-dataloader"
 import { PaginatedResponse } from "../pagination"
 import { FileUpload, GraphQLUpload } from "graphql-upload"
+import { File } from "./file"
 
 @Entity()
 @ObjectType()
@@ -45,13 +45,6 @@ export class Task {
     @TypeormLoader((type) => Task, (task: Task) => task.projectId)
     @Field(() => Project)
     project!: Project
-
-    @OneToMany(() => DatabaseFile, (file) => file.task)
-    @TypeormLoader((type) => DatabaseFile, (task: Task) => task.fileIds)
-    files!: Array<DatabaseFile>
-
-    @RelationId((task: Task) => task.files)
-    fileIds!: KeyType[]
 
     @Column({ nullable: true })
     @Field({ nullable: true })

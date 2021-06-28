@@ -12,16 +12,24 @@ import * as cors from "@koa/cors"
 import { createServer as createHttpServer, Server as HttpServer } from "http"
 import { createServer as createHttpsServer, Server as HttpsServer } from "https"
 import { readFile } from "fs/promises"
+import { HybridComputationService } from "./services/hybrid-computation-service"
+import { LocalComputationService } from "./services/local-computation-service"
+import * as serve from "koa-static"
+import * as mount from "koa-mount"
 
-const { PORT, PROTOCOL } = process.env
+const { PORT, PROTOCOL, URL } = process.env
 const port = PORT || 80
 var protocol = PROTOCOL || "https"
+export const SERVER_URL = URL
 
 async function main() {
     const connection = await initializeConnection()
     Container.set(ConnectionToken, connection)
 
-    const computationService = new KaggleComputationService() //new LocalComputationService(connection)
+    const computationService = new HybridComputationService(
+        new KaggleComputationService(),
+        new LocalComputationService(connection)
+    )
     Container.set(ComputationServiceToken, computationService)
 
     const typeormLoaderApolloServerPlugin = ApolloServerLoaderPlugin({
@@ -31,7 +39,7 @@ async function main() {
     const schema = await buildSchema({
         resolvers: Resolvers,
         container: Container,
-        authChecker: (data) => computationService.checkAuthentication(data.context.credentials),
+        authChecker: (data) => data.context.user != null,
     })
 
     const app = new Koa().use(
@@ -51,6 +59,8 @@ async function main() {
         })
     )
 
+    app.use(mount("/files", serve("files")))
+
     let server: HttpServer | HttpsServer
     if (protocol == "https") {
         var privateKey = await readFile("ssl.key", "utf8")
@@ -64,11 +74,13 @@ async function main() {
         schema,
         uploads: false,
         plugins: [typeormLoaderApolloServerPlugin],
-        context: ({ ctx: { req } }) => {
+        context: async ({ ctx: { req } }) => {
             try {
                 const json = req.headers.authorization
                 const credentials = JSON.parse(json)
-                return { credentials }
+                return {
+                    user: await computationService.checkAuthentication(credentials),
+                }
             } catch {
                 return {}
             }

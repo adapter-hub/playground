@@ -11,6 +11,8 @@
         "graphql": "^15.5.0",
         "graphql-upload": "^12.0.0",
         "koa": "^2.13.1",
+        "koa-mount": "^4.0.0",
+        "koa-static": "^5.0.0",
         "mysql": "^2.18.1",
         "python-shell": "^3.0.0",
         "reflect-metadata": "^0.1.13",
@@ -23,6 +25,7 @@
     "scripts": {
         "build": "tsc",
         "start": "node -r dotenv/config dist dotenv_config_path=prod.env",
+        "start-dev": "node -r dotenv/config dist dotenv_config_path=dev.env",
         "dev": "nodemon -e ts --watch src --exec ts-node -r dotenv/config src dotenv_config_path=dev.env",
         "win-typeorm-dev-sync": "set DOTENV_CONFIG_PATH=ormconfig-dev.env&& ts-node -r dotenv/config ./node_modules/typeorm/cli.js schema:sync",
         "win-typeorm-prod-sync": "set DOTENV_CONFIG_PATH=ormconfig-prod.env&& ts-node -r dotenv/config ./node_modules/typeorm/cli.js schema:sync",
@@ -31,6 +34,8 @@
         "typeorm-sync": "ts-node -r dotenv/config ./node_modules/typeorm/cli.js schema:sync"
     },
     "devDependencies": {
+        "@types/koa-mount": "^4.0.0",
+        "@types/koa-static": "^4.0.1",
         "@types/uuid": "^8.3.0",
         "nodemon": "^2.0.7",
         "ts-node": "^9.1.1",

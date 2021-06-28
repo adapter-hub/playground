@@ -110,7 +110,7 @@ shutil.make_archive(dir_name_of_trained_adapter,"zip", dir_name_of_trained_adapt
 export function genLoadAdapterFromUser(): string {
     return `
 # load own adapter
-adapter_name = model.load_adapter("/kaggle/working/input_adapter_folder")`
+adapter_name = model.load_adapter("input_adapter_folder")`
 }
 
 export function genSaveAdapter(): string {
@@ -125,9 +125,8 @@ export function genDeleteUselessFiles(): string {
     return `
 # files which are not needed to be presented to the user are deleted
 import shutil
-shutil.rmtree('/kaggle/working/runs', ignore_errors=True)
-shutil.rmtree('/kaggle/working/input_adapter_folder', ignore_errors=True)
-shutil.rmtree('/kaggle/working/trained_adapter', ignore_errors=True)
-shutil.rmtree('/kaggle/working/trained_adapter', ignore_errors=True)
+shutil.rmtree('runs', ignore_errors=True)
+shutil.rmtree('input_adapter_folder', ignore_errors=True)
+shutil.rmtree('trained_adapter', ignore_errors=True)
 shutil.rmtree('~/.cache/', ignore_errors=True)`
 }

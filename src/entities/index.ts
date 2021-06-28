@@ -5,12 +5,10 @@ export const KeyType = Int
 
 export * from "./project"
 export * from "./task"
-export * from "./file"
 
 import { Task } from "./task"
-import { DatabaseFile } from "./file"
 import { Project } from "./project"
 
-export const Entities = [DatabaseFile, Task, Project]
+export const Entities = [Task, Project]
 
-export type Entity = DatabaseFile | Task | Project
+export type Entity = Task | Project

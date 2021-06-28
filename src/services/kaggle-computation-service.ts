@@ -1,7 +1,7 @@
 import { KaggleApi } from "../api/kaggle"
 import { KaggleKernelPushRequest } from "../api/kaggle/models/KaggleKernelPushRequest"
 import { Task, TaskStatus, TaskOutput } from "../entities"
-import { ComputationService } from "./computation-service"
+import { ComputationService, User } from "./computation-service"
 import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
 import { ReadStream } from "fs"
@@ -11,33 +11,34 @@ import { KaggleKernelOutputFile } from "../api/kaggle/models/KaggleKernelOutputF
 const authenticationCache = new Map<string, number>()
 
 export class KaggleComputationService implements ComputationService {
-    async checkAuthentication(credentials: any): Promise<boolean> {
+    async checkAuthentication(credentials: any): Promise<User | undefined> {
+        const user: User = { type: "kaggle", key: credentials.key, username: credentials.username }
         const authenticationDate = authenticationCache.get(credentials.username)
         if (authenticationDate != null) {
             //15 minutes expire time
             if (new Date().getTime() - authenticationDate <= 15 * 60 * 1000) {
-                return true
+                return user
             }
         }
         // send random status request and see if response is: 401 unauthorized
         try {
-            await KaggleApi.kernelStatus(credentials, credentials.username, "183z2u3h")
+            await KaggleApi.kernelStatus(user, user.username, "183z2u3h")
         } catch (error) {
             if (error.response.status === 401) {
-                return false
+                return undefined
             } else if (error.response.status === 404) {
                 //kernel "test" does not exist but user is authenticated
-                authenticationCache.set(credentials.username, new Date().getTime())
-                return true
+                authenticationCache.set(user.username, new Date().getTime())
+                return user
             } else {
                 throw error
             }
         }
-        return true
+        return user
     }
 
-    async getTaskStatus(credentials: any, task: Task): Promise<TaskStatus> {
-        const response = await KaggleApi.kernelStatus(credentials, credentials.username, task.kernelId!)
+    async getTaskStatus(user: User, task: Task): Promise<TaskStatus> {
+        const response = await KaggleApi.kernelStatus(user, user.username, task.kernelId!)
         switch (response.status) {
             case "complete":
                 return TaskStatus.Complete
@@ -50,8 +51,8 @@ export class KaggleComputationService implements ComputationService {
         }
     }
 
-    async getTaskOutput(credentials: any, task: Task): Promise<TaskOutput | undefined> {
-        const { files, log } = await KaggleApi.kernelOutput(credentials, credentials.username, task.kernelId!)
+    async getTaskOutput(user: User, task: Task): Promise<TaskOutput | undefined> {
+        const { files, log } = await KaggleApi.kernelOutput(user, user.username, task.kernelId!)
         return {
             ...(await this.getMetrics(files)),
             files:
@@ -95,17 +96,11 @@ export class KaggleComputationService implements ComputationService {
         return errorContent
     }
 
-    async startTask(credentials: any, task: Task, code: string, filePath: string | undefined): Promise<void> {
+    async startTask(user: User, task: Task, code: string, filePath: string | undefined): Promise<void> {
         if (task.kernelId == null) {
             throw "task has no kernel id (not created for kaggle?)"
         }
-        const kernelPushRequest = new KaggleKernelPushRequest(
-            credentials.username,
-            task.kernelId,
-            code,
-            "python",
-            "script"
-        )
+        const kernelPushRequest = new KaggleKernelPushRequest(user.username, task.kernelId, code, "python", "script")
         kernelPushRequest.setIsPrivate(true)
         kernelPushRequest.setEnableGpu(true)
         kernelPushRequest.setEnableInternet(true)
@@ -115,7 +110,7 @@ export class KaggleComputationService implements ComputationService {
             kernelPushRequest.setDatasetDataSources([filePath])
         }
 
-        const { error } = await KaggleApi.kernelPush(credentials, kernelPushRequest)
+        const { error } = await KaggleApi.kernelPush(user, kernelPushRequest)
         if (error != null) {
             throw error
         }
@@ -130,17 +125,17 @@ export class KaggleComputationService implements ComputationService {
         })
     }
 
-    async uploadFile(credentials: any, file: FileUpload): Promise<string> {
+    async uploadFile(user: User, file: FileUpload): Promise<string> {
         const buffer = await this.streamToBuffer(file.createReadStream())
 
-        const { token, createUrl } = await KaggleApi.uploadFile(credentials, "default", buffer.length, 0)
+        const { token, createUrl } = await KaggleApi.uploadFile(user, "default", buffer.length, 0)
         await axios.post(createUrl, buffer)
 
-        const filePath = await KaggleApi.createDataset(credentials, credentials.username, uuidv4(), token)
+        const filePath = await KaggleApi.createDataset(user, user.username, uuidv4(), token)
 
         await wait(3000)
 
-        return filePath
+        return `../input/${filePath.split("/")[1]}/default`
     }
 }
 

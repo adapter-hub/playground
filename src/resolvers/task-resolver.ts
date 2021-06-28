@@ -16,7 +16,7 @@ import {
 import { Inject } from "typedi"
 import { Connection } from "typeorm"
 import { ComputationServiceToken, ConnectionToken } from "../typeorm"
-import { ComputationService } from "../services"
+import { ComputationService, User } from "../services"
 import { generateCode } from "../code-generation/main"
 import { v4 as uuidv4 } from "uuid"
 import { generateClusteringCode } from "../code-generation/clustering"
@@ -35,20 +35,20 @@ export class TaskResolver {
 
     @Authorized()
     @Query((returns) => Task)
-    public async getTask(@Ctx() { credentials }: { credentials?: any }, @Arg("id", (type) => KeyType) id: KeyType) {
-        await checkTaskAccess(this.connection, credentials, id)
+    public async getTask(@Ctx() { user }: { user: User }, @Arg("id", (type) => KeyType) id: KeyType) {
+        await checkTaskAccess(this.connection, user, id)
         const project = await this.connection.getRepository(Task).findOneOrFail(id)
         return project
     }
 
     @Authorized()
     @Mutation((returns) => Task)
-    public async addClusteringTask(@Ctx() { credentials }: any, @Arg("input") input: NewClusteringTaskInput) {
-        await checkProjectAccess(this.connection, credentials, input.projectId)
+    public async addClusteringTask(@Ctx() { user }: { user: User }, @Arg("input") input: NewClusteringTaskInput) {
+        await checkProjectAccess(this.connection, user, input.projectId)
         const project = await this.connection.getRepository(Project).findOneOrFail(input.projectId)
         const code = generateClusteringCode(input, spreadSheetIdToLink(project.googleSheetId), sheetsAccessToken)
         return await this.addTask(
-            credentials,
+            user,
             {
                 type: TaskType.Clustering,
                 ...input,
@@ -60,13 +60,13 @@ export class TaskResolver {
 
     @Authorized()
     @Mutation((returns) => Task)
-    public async addTrainingTask(@Ctx() { credentials }: any, @Arg("input") input: NewTrainingTaskInput) {
-        await checkProjectAccess(this.connection, credentials, input.projectId)
+    public async addTrainingTask(@Ctx() { user }: { user: User }, @Arg("input") input: NewTrainingTaskInput) {
+        await checkProjectAccess(this.connection, user, input.projectId)
         const project = await this.connection.getRepository(Project).findOneOrFail(input.projectId)
         let filePath: string | undefined
         if (input.file != null) {
             const file = await input.file
-            filePath = await this.computationService.uploadFile(credentials, file)
+            filePath = await this.computationService.uploadFile(user, file)
         }
         const code = generateCode({
             doTraining: true,
@@ -76,7 +76,7 @@ export class TaskResolver {
             sheetsDocumentURL: spreadSheetIdToLink(project.googleSheetId),
         })
         return await this.addTask(
-            credentials,
+            user,
             {
                 type: TaskType.Training,
                 ...input,
@@ -88,13 +88,13 @@ export class TaskResolver {
 
     @Authorized()
     @Mutation((returns) => Task)
-    public async addPredictionTask(@Ctx() { credentials }: any, @Arg("input") input: NewPredictionTaskInput) {
-        await checkProjectAccess(this.connection, credentials, input.projectId)
+    public async addPredictionTask(@Ctx() { user }: { user: User }, @Arg("input") input: NewPredictionTaskInput) {
+        await checkProjectAccess(this.connection, user, input.projectId)
         const project = await this.connection.getRepository(Project).findOneOrFail(input.projectId)
         let filePath: string | undefined
         if (input.file != null) {
             const file = await input.file
-            filePath = await this.computationService.uploadFile(credentials, file)
+            filePath = await this.computationService.uploadFile(user, file)
         }
         const code = generateCode({
             doTraining: false,
@@ -104,7 +104,7 @@ export class TaskResolver {
             sheetsDocumentURL: spreadSheetIdToLink(project.googleSheetId),
         })
         return await this.addTask(
-            credentials,
+            user,
             {
                 type: TaskType.Prediction,
                 ...input,
@@ -115,19 +115,19 @@ export class TaskResolver {
     }
 
     @FieldResolver(() => TaskStatus)
-    public async status(@Ctx() { credentials }: any, @Root() task: Task) {
-        await checkTaskAccess(this.connection, credentials, task.id)
-        return this.computationService.getTaskStatus(credentials, task)
+    public async status(@Ctx() { user }: { user: User }, @Root() task: Task) {
+        await checkTaskAccess(this.connection, user, task.id)
+        return this.computationService.getTaskStatus(user, task)
     }
 
     @FieldResolver(() => TaskOutput, { nullable: true })
-    public async output(@Ctx() { credentials }: any, @Root() task: Task) {
-        await checkTaskAccess(this.connection, credentials, task.id)
-        return this.computationService.getTaskOutput(credentials, task)
+    public async output(@Ctx() { user }: { user: User }, @Root() task: Task) {
+        await checkTaskAccess(this.connection, user, task.id)
+        return this.computationService.getTaskOutput(user, task)
     }
 
     private async addTask(
-        credentials: any,
+        user: User,
         input: NewTaskInput & { type: TaskType },
         code: string,
         filePath: string | undefined
@@ -137,14 +137,14 @@ export class TaskResolver {
             ...input,
             kernelId,
         })
-        await this.computationService.startTask(credentials, task, code, filePath)
+        await this.computationService.startTask(user, task, code, filePath)
         return await this.connection.getRepository(Task).findOne(task.id)
     }
 
     @Authorized()
     @Mutation((returns) => GraphQLBoolean)
-    public async deleteTask(@Ctx() { credentials }: { credentials?: any }, @Arg("id", (type) => KeyType) id: KeyType) {
-        await checkTaskAccess(this.connection, credentials, id)
+    public async deleteTask(@Ctx() { user }: { user: User }, @Arg("id", (type) => KeyType) id: KeyType) {
+        await checkTaskAccess(this.connection, user, id)
         await this.connection.getRepository(Task).delete(id)
         return true
     }

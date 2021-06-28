@@ -8,13 +8,17 @@ import { KaggleKernelOutput } from "./models/KaggleKernelOutput"
 import { KaggleKernelPull } from "./models/KaggleKernelPull"
 import * as FormData from "form-data"
 import { KaggleFileUploadToken } from "./models/KaggleFileUploadToken"
+import { User } from "../../services"
 
 const BASE_PATH = "https://www.kaggle.com/api/v1"
 export const KaggleApi = {
-    kernelList(credentials: any, listRequest: KaggleKernelListRequest): Promise<KaggleKernelListItem[]> {
+    kernelList(user: User, listRequest: KaggleKernelListRequest): Promise<KaggleKernelListItem[]> {
+        if (user.type !== "kaggle") {
+            throw new Error("not a kaggle user")
+        }
         return axios
             .get(BASE_PATH + "/kernels/list", {
-                auth: { username: credentials.username, password: credentials.key },
+                auth: { username: user.username, password: user.key },
                 params: listRequest,
             })
             .then((response) => {
@@ -33,10 +37,13 @@ export const KaggleApi = {
             })
     },
 
-    kernelPush(credentials: any, pushRequest: KaggleKernelPushRequest): Promise<KaggleKernelPushResponse> {
+    kernelPush(user: User, pushRequest: KaggleKernelPushRequest): Promise<KaggleKernelPushResponse> {
+        if (user.type !== "kaggle") {
+            throw new Error("not a kaggle user")
+        }
         return axios
             .post(BASE_PATH + "/kernels/push", pushRequest, {
-                auth: { username: credentials.username, password: credentials.key },
+                auth: { username: user.username, password: user.key },
             })
             .then((response) => {
                 const data = response.data
@@ -46,10 +53,13 @@ export const KaggleApi = {
             })
     },
 
-    kernelOutput(credentials: any, userName: string, kernelSlug: string): Promise<KaggleKernelOutput> {
+    kernelOutput(user: User, userName: string, kernelSlug: string): Promise<KaggleKernelOutput> {
+        if (user.type !== "kaggle") {
+            throw new Error("not a kaggle user")
+        }
         return axios
             .get(BASE_PATH + "/kernels/output", {
-                auth: { username: credentials.username, password: credentials.key },
+                auth: { username: user.username, password: user.key },
                 params: { userName: userName, kernelSlug: kernelSlug },
             })
             .then((response) => {
@@ -64,10 +74,13 @@ export const KaggleApi = {
             })
     },
 
-    kernelPull(credentials: any, userName: string, kernelSlug: string): Promise<KaggleKernelPull> {
+    kernelPull(user: User, userName: string, kernelSlug: string): Promise<KaggleKernelPull> {
+        if (user.type !== "kaggle") {
+            throw new Error("not a kaggle user")
+        }
         return axios
             .get(BASE_PATH + "/kernels/pull", {
-                auth: { username: credentials.username, password: credentials.key },
+                auth: { username: user.username, password: user.key },
                 params: { userName: userName, kernelSlug: kernelSlug },
             })
             .then((response) => {
@@ -78,10 +91,13 @@ export const KaggleApi = {
             })
     },
 
-    kernelStatus(credentials: any, username: string, kernelSlug: string): Promise<KaggleKernelStatus> {
+    kernelStatus(user: User, username: string, kernelSlug: string): Promise<KaggleKernelStatus> {
+        if (user.type !== "kaggle") {
+            throw new Error("not a kaggle user")
+        }
         return axios
             .get(BASE_PATH + "/kernels/status", {
-                auth: { username: credentials.username, password: credentials.key },
+                auth: { username: user.username, password: user.key },
                 params: { userName: username, kernelSlug: kernelSlug },
             })
             .then((response) => {
@@ -93,18 +109,21 @@ export const KaggleApi = {
     },
 
     uploadFile(
-        credentials: any,
+        user: User,
         fileName: string,
         contentLength: number,
         lastModified: number
     ): Promise<KaggleFileUploadToken> {
+        if (user.type !== "kaggle") {
+            throw new Error("not a kaggle user")
+        }
         const formData = new FormData()
         formData.append("fileName", fileName)
 
         return axios
             .post(`${BASE_PATH}/datasets/upload/file/${contentLength}/${lastModified}`, formData, {
                 headers: formData.getHeaders(),
-                auth: { username: credentials.username, password: credentials.key },
+                auth: { username: user.username, password: user.key },
             })
             .then((response) => {
                 const data = response.data
@@ -114,7 +133,10 @@ export const KaggleApi = {
             })
     },
 
-    createDataset(credentials: any, userName: string, datasetSlug: string, fileToken: string): Promise<string> {
+    createDataset(user: User, userName: string, datasetSlug: string, fileToken: string): Promise<string> {
+        if (user.type !== "kaggle") {
+            throw new Error("not a kaggle user")
+        }
         return axios
             .post(
                 BASE_PATH + "/datasets/create/new",
@@ -125,7 +147,7 @@ export const KaggleApi = {
                     files: [{ token: fileToken }],
                     isPrivate: true,
                 },
-                { auth: { username: credentials.username, password: credentials.key } }
+                { auth: { username: user.username, password: user.key } }
             )
             .then((response) => {
                 const data = response.data
