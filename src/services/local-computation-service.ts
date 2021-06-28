@@ -6,7 +6,7 @@ import { Connection } from "typeorm"
 import { FileUpload } from "graphql-upload"
 import { resolve, join } from "path"
 import { SERVER_URL } from ".."
-import { createWriteStream } from "fs"
+import { createWriteStream, exists } from "fs"
 import { v4 as uuidv4 } from "uuid"
 
 export class LocalComputationService implements ComputationService {
@@ -38,14 +38,19 @@ export class LocalComputationService implements ComputationService {
     async getTaskOutput(user: User, task: Task): Promise<TaskOutput> {
         this.throwIfNotAuthenticated(user)
         const path = this.getTaskPath(task)
-        const filePaths = await (
-            await readdir(path)
-        ).reduce(async (promise, filePath) => {
-            if ((await stat(join(path, filePath))).isDirectory()) {
-                return promise
-            }
-            return [filePath, ...(await promise)]
-        }, Promise.resolve<Array<string>>([]))
+        let filePaths: Array<string>
+        try {
+            filePaths = await (
+                await readdir(path)
+            ).reduce(async (promise, filePath) => {
+                if ((await stat(join(path, filePath))).isDirectory()) {
+                    return promise
+                }
+                return [filePath, ...(await promise)]
+            }, Promise.resolve<Array<string>>([]))
+        } catch (e) {
+            filePaths = []
+        }
 
         let f1 = 0
         let accuracy = 0
