@@ -1,4 +1,4 @@
-import { mkdir, readdir, stat, readFile } from "fs/promises"
+import { mkdir, readdir, stat, readFile, writeFile } from "fs/promises"
 import { ComputationService, PlatformType, User } from "."
 import { Task, TaskStatus, TaskOutput } from "../entities"
 import { PythonShell } from "python-shell"
@@ -6,7 +6,7 @@ import { Connection } from "typeorm"
 import { FileUpload } from "graphql-upload"
 import { resolve, join } from "path"
 import { SERVER_URL } from ".."
-import { createWriteStream, exists } from "fs"
+import { createWriteStream } from "fs"
 import { v4 as uuidv4 } from "uuid"
 
 export class LocalComputationService implements ComputationService {
@@ -81,8 +81,11 @@ export class LocalComputationService implements ComputationService {
         await mkdir(path)
         await repo.save(task)
         let output = ""
-        PythonShell.runString(
-            code,
+        output += PythonShell.getVersionSync("python3")
+        const codePath = join(path, "code.py")
+        await writeFile(codePath, code)
+        PythonShell.run(
+            codePath,
             {
                 pythonPath: "python3",
                 cwd: path,
