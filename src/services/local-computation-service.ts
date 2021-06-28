@@ -79,6 +79,7 @@ export class LocalComputationService implements ComputationService {
         PythonShell.runString(
             code,
             {
+                pythonPath: "python3",
                 cwd: path,
             },
             (error) => {
