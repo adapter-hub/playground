@@ -114,7 +114,7 @@ export function AdapterhubAdapterConfig({
     config,
     setConfig,
     expertMode,
-    training
+    training,
 }: {
     config: AdapterhubAdapterConfig
     setConfig: (config: AdapterhubAdapterConfig) => void
@@ -174,7 +174,7 @@ export function AdapterhubAdapterConfig({
                 </Form.Group>
             </Form>
             {expertMode && [
-                <ul className="nav nav-tabs mb-3">
+                <ul key="ul" className="nav nav-tabs mb-3">
                     <li className="nav-item">
                         <a
                             onClick={() =>
@@ -202,7 +202,7 @@ export function AdapterhubAdapterConfig({
                         </a>
                     </li>
                 </ul>,
-                <Form>
+                <Form key="Form">
                     {config.ownAdapter
                         ? [
                               <p key="warning" className="font-weight-bold text-warning">

@@ -1,14 +1,18 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { Col, Form, Row } from "react-bootstrap"
 import { useDropzone } from "react-dropzone"
 import { toast } from "react-toastify"
 import { useCheckAutenticationLazyQuery } from "../api"
 import { LoadingComponent } from "../components/loading-component"
 
-export type KaggleCredentials = {
+type KaggleCredentials = {
     username: string
     key: string
 }
+
+export type Credentials = {
+    uri: string
+} & KaggleCredentials
 
 enum KaggleCredentialsState {
     WrongFormat,
@@ -18,9 +22,10 @@ enum KaggleCredentialsState {
     Loading,
 }
 
-export function LoginPage({ login }: { login: (credentials: KaggleCredentials, rememberMe: boolean) => void }) {
+export function LoginPage({ login }: { login: (credentials: Credentials, rememberMe: boolean) => void }) {
     const [rememberMe, setRememberMe] = useState(false)
     const [consent, setConsent] = useState(false)
+    const [uri, setUri] = useState("https://bp2020.ukp.informatik.tu-darmstadt.de:1337/graphql")
     const [state, setState] = React.useState(KaggleCredentialsState.ShowNothing)
 
     const onDrop = useCallback(
@@ -38,7 +43,7 @@ export function LoginPage({ login }: { login: (credentials: KaggleCredentials, r
                     try {
                         const credentials: KaggleCredentials = JSON.parse(e.target?.result as string)
 
-                        login(credentials, rememberMe)
+                        login({ ...credentials, uri }, rememberMe)
                     } catch (error) {
                         setState(KaggleCredentialsState.WrongFormat)
                         toast.error("wrong formatted login token")
@@ -47,12 +52,12 @@ export function LoginPage({ login }: { login: (credentials: KaggleCredentials, r
                 reader.readAsText(file)
             })
         },
-        [rememberMe, login, setState, consent]
+        [rememberMe, uri, login, setState, consent]
     )
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: ".json" })
 
-    const StatusMessage = useCallback(() => {
+    const StatusMessage = useMemo(() => {
         switch (state) {
             case KaggleCredentialsState.ShowNothing:
                 return null
@@ -90,6 +95,10 @@ export function LoginPage({ login }: { login: (credentials: KaggleCredentials, r
                 </h2>
             </div>
             <div className="container">
+                <h2>Select Backend to Run On</h2>
+                <Form.Group>
+                    <input className="form-control" type="text" value={uri} onChange={(e) => setUri(e.target.value)} />
+                </Form.Group>
                 <h2>Upload kaggle.json to Sign In</h2>
                 <Row className="mt-3">
                     <Col className="d-flex justify-content-center">

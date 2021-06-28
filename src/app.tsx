@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useMemo, useState } from "react"
+import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react"
 import { Toolbar } from "./components/toolbar"
 import { FooterComponent } from "./components/footer-component"
 import { Faqpage } from "./pages/faq-page"
@@ -6,38 +6,45 @@ import "./custom.scss"
 import { HashRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 import { ProjectListPage } from "./pages/project-list-page"
 import ProjectPage from "./pages/project-page"
-import { useCheckAutenticationQuery } from "./api"
-import { KaggleCredentials, LoginPage } from "./pages/login-page"
+import { useCheckAutenticationLazyQuery, useCheckAutenticationQuery } from "./api"
+import { Credentials, LoginPage } from "./pages/login-page"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 import { LoadingComponent } from "./components/loading-component"
 import { createUploadLink } from "apollo-upload-client"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-function saveCredentials({ username, key }: KaggleCredentials, rememberMe: boolean) {
+function saveCredentials({ username, key, uri }: Credentials, rememberMe: boolean) {
     if (rememberMe) {
         localStorage.setItem("username", username)
         localStorage.setItem("key", key)
+        localStorage.setItem("uri", uri)
     } else {
         sessionStorage.setItem("username", username)
         sessionStorage.setItem("key", key)
+        sessionStorage.setItem("uri", uri)
     }
 }
 
 function deleteCredentials(): void {
-    sessionStorage.removeItem("username")
-    sessionStorage.removeItem("key")
     localStorage.removeItem("username")
     localStorage.removeItem("key")
+    localStorage.removeItem("uri")
+
+    sessionStorage.removeItem("username")
+    sessionStorage.removeItem("key")
+    sessionStorage.removeItem("uri")
 }
 
-function getCredentials(): KaggleCredentials | undefined {
+function getCredentials(): Credentials | undefined {
     const username = sessionStorage.getItem("username") ?? localStorage.getItem("username")
     const key = sessionStorage.getItem("key") ?? localStorage.getItem("key")
-    if (key != null && username != null) {
+    const uri = sessionStorage.getItem("uri") ?? localStorage.getItem("uri")
+    if (key != null && username != null && uri != null) {
         return {
             username,
             key,
+            uri,
         }
     } else {
         return undefined
@@ -48,29 +55,42 @@ export function ClientApp() {
     const [credentials, setCredentials] = useState(() => getCredentials())
     const client = useMemo(
         () =>
-            new ApolloClient({
-                cache: new InMemoryCache(),
-                link: createUploadLink({
-                    uri: "https://bp2020.ukp.informatik.tu-darmstadt.de:1337/graphql", //"http://localhost:4000/graphql",
-                    credentials: "same-origin",
-                    headers:
-                        credentials != null
-                            ? {
-                                  authorization: JSON.stringify(credentials),
-                              }
-                            : undefined,
-                }),
-            }),
+            credentials == null
+                ? undefined
+                : new ApolloClient({
+                      cache: new InMemoryCache(),
+                      link: createUploadLink({
+                          uri: credentials.uri,
+                          credentials: "same-origin",
+                          headers: {
+                              authorization: JSON.stringify({
+                                  username: credentials.username,
+                                  key: credentials.key,
+                              }),
+                          },
+                      }),
+                  }),
         [credentials]
     )
+
+    if (client == null) {
+        return <App tryLogin={false} setCredentials={setCredentials} />
+    }
+
     return (
         <ApolloProvider client={client}>
-            <App setCredentials={setCredentials} />
+            <App tryLogin={credentials != null} setCredentials={setCredentials} />
         </ApolloProvider>
     )
 }
 
-export function App({ setCredentials }: { setCredentials: (credentials: KaggleCredentials | undefined) => void }) {
+export function App({
+    setCredentials,
+    tryLogin,
+}: {
+    tryLogin: boolean
+    setCredentials: (credentials: Credentials | undefined) => void
+}) {
     const logout = useCallback(() => {
         deleteCredentials()
         setCredentials(undefined)
@@ -88,13 +108,13 @@ export function App({ setCredentials }: { setCredentials: (credentials: KaggleCr
                     <Route
                         path={"/projects/:id"}
                         render={(props) => (
-                            <AuthWrapper setCredentials={setCredentials}>
+                            <AuthWrapper tryLogin={tryLogin} setCredentials={setCredentials}>
                                 <Toolbar logout={logout} />
                                 <ProjectPage {...props} />
                             </AuthWrapper>
                         )}></Route>
                     <Route path="/projects">
-                        <AuthWrapper setCredentials={setCredentials}>
+                        <AuthWrapper tryLogin={tryLogin} setCredentials={setCredentials}>
                             <Toolbar logout={logout} />
                             <ProjectListPage />
                         </AuthWrapper>
@@ -116,8 +136,15 @@ export function App({ setCredentials }: { setCredentials: (credentials: KaggleCr
 export function AuthWrapper({
     children,
     setCredentials,
-}: PropsWithChildren<{ setCredentials: (credentials: KaggleCredentials | undefined) => void }>) {
-    const { data, loading } = useCheckAutenticationQuery({
+    tryLogin,
+}: PropsWithChildren<{
+    setCredentials: (credentials: Credentials | undefined) => void
+    tryLogin: boolean
+}>) {
+    const [checkAuthentication, { data, loading }] = useCheckAutenticationLazyQuery({
+        onError: (error) => {
+            toast.error(`unable to login (${error.message})`)
+        },
         onCompleted: (data) => {
             if (data.checkAuthentication) {
                 toast.success("successfully logged in")
@@ -127,8 +154,14 @@ export function AuthWrapper({
         },
     })
 
+    useEffect(() => {
+        if (tryLogin) {
+            checkAuthentication()
+        }
+    }, [tryLogin])
+
     const login = useCallback(
-        (credentials: KaggleCredentials, rememberMe: boolean) => {
+        (credentials: Credentials, rememberMe: boolean) => {
             saveCredentials(credentials, rememberMe)
             setCredentials(credentials)
         },
