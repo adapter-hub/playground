@@ -1,19 +1,26 @@
+import { PlatformType } from "../services"
 import * as training from "./training"
 import * as utils from "./utils"
 
-export function genKaggleOS(): string {
-    return `import os
+export function genKaggleOS(platformType: PlatformType): string {
+    if (platformType === "kaggle") {
+        return `import os
 os.system('pip uninstall -y transformers')
 os.system('pip uninstall -y typing')
 os.system('pip uninstall -y tokenizers')
 os.system('pip uninstall -y sacremoses')
 os.system('pip install gspread oauth2client')`
+    }
+    return ""
 }
 
-export function genInstallAH(): string {
-    return `
+export function genInstallAH(platformType: PlatformType): string {
+    if (platformType === "kaggle") {
+        return `
 #------------------------------------------------------------PART 2------------------------------------------------------------
 os.system('pip install git+https://github.com/adapter-hub/adapter-transformers.git@develop')`
+    }
+    return ""
 }
 
 export function genExplainCode(): string {

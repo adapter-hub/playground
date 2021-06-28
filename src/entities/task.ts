@@ -30,7 +30,7 @@ export class Task {
     @Filter("eq", () => Int)
     status?: TaskStatus
 
-    @Column({ nullable: true })
+    @Column("longtext", { nullable: true })
     @Field({ nullable: true })
     @Filter("eq")
     log?: string

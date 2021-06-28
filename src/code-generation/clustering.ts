@@ -2,12 +2,22 @@ import { ClusteringTaskMethod, ClusteringTaskRepresentation, NewClusteringTaskIn
 import * as setup from "./setup"
 import * as IOHandling from "./IO-handling"
 import { InputType } from "./utils"
+import { PlatformType } from "../services"
 
-export function generateClusteringCode({ method, nClusters, representation, sheetsColumnName, name }: NewClusteringTaskInput, sheetsDocumentURL: string, sheetsAccessToken: string) {
+export function generateClusteringCode(
+    platformType: PlatformType,
+    { method, nClusters, representation, sheetsColumnName, name }: NewClusteringTaskInput,
+    sheetsDocumentURL: string,
+    sheetsAccessToken: string
+) {
     return `
-import os
+${
+    platformType == "kaggle"
+        ? `import os
 os.system('pip install sentence_transformers')
-os.system('pip install gspread oauth2client')
+os.system('pip install gspread oauth2client')`
+        : ""
+}
 import numpy as np
 
 ${setup.genImportSheetConnectionPackages()}

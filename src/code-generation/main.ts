@@ -1,7 +1,9 @@
+import { PlatformType } from "../services"
 import * as codeGen from "./code-generation"
 import * as utils from "./utils"
 
 export function generateCode(
+    platformType: PlatformType,
     parameter: {
         taskType: string
         trainingDataset: string
@@ -44,6 +46,7 @@ export function generateCode(
     const goldLabelTranslation = transDicAndGoldLabelTranslation[1]
 
     const sharedStartSetupCode = codeGen.genSharedStartSetup(
+        platformType,
         parameter.modelTransformerClass,
         parameter.modelName,
         parameter.doTraining,

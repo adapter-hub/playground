@@ -3,8 +3,10 @@ import * as training from "./training"
 import * as setup from "./setup"
 import * as errorHandling from "./error-handling"
 import * as utils from "./utils"
+import { PlatformType } from "../services"
 
 export function genSharedStartSetup(
+    platformType: PlatformType,
     modelTransformerClass: string,
     modelName: string,
     doTraining: boolean,
@@ -15,7 +17,7 @@ export function genSharedStartSetup(
     pipeline: string,
     roundGoldLabels: boolean
 ): string {
-    return `${setup.genKaggleOS()}
+    return `${setup.genKaggleOS(platformType)}
 ${setup.genExplainCode()}
 ${setup.genImportSheetConnectionPackages()}
 ${IOHandling.genInitializeSheetConnection(sheetsDocumentURL, sheetsAccessToken)}
@@ -24,7 +26,7 @@ ${errorHandling.genFilterInvalidTextInputs(doTraining, inputType)}
 ${IOHandling.genReadGoldLabels(goldLabelTranslation, roundGoldLabels)}
 ${errorHandling.genFilterGoldLabels(doTraining, inputType)}
 ${errorHandling.genPossibleTerminate(doTraining)}
-${setup.genInstallAH()}
+${setup.genInstallAH(platformType)}
 ${setup.genImportAHPackages(doTraining, pipeline, modelTransformerClass)}
 ${setup.genTokenizer(modelName)}
 ${setup.genLoadModel(modelName, modelTransformerClass)}`

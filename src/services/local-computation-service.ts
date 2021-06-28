@@ -78,7 +78,6 @@ export class LocalComputationService implements ComputationService {
                 cwd: path,
             },
             (error) => {
-                console.log(output)
                 task.log = output
                 if (error) {
                     task.status = TaskStatus.Error

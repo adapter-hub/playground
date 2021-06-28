@@ -46,7 +46,12 @@ export class TaskResolver {
     public async addClusteringTask(@Ctx() { user }: { user: User }, @Arg("input") input: NewClusteringTaskInput) {
         await checkProjectAccess(this.connection, user, input.projectId)
         const project = await this.connection.getRepository(Project).findOneOrFail(input.projectId)
-        const code = generateClusteringCode(input, spreadSheetIdToLink(project.googleSheetId), sheetsAccessToken)
+        const code = generateClusteringCode(
+            this.computationService.platformType,
+            input,
+            spreadSheetIdToLink(project.googleSheetId),
+            sheetsAccessToken
+        )
         return await this.addTask(
             user,
             {
@@ -68,7 +73,7 @@ export class TaskResolver {
             const file = await input.file
             filePath = await this.computationService.uploadFile(user, file)
         }
-        const code = generateCode({
+        const code = generateCode(this.computationService.platformType, {
             doTraining: true,
             ...input,
             ...assureAdapterConfiguration(input, filePath),
@@ -96,7 +101,7 @@ export class TaskResolver {
             const file = await input.file
             filePath = await this.computationService.uploadFile(user, file)
         }
-        const code = generateCode({
+        const code = generateCode(this.computationService.platformType, {
             doTraining: false,
             ...input,
             ...assureAdapterConfiguration(input, filePath),
