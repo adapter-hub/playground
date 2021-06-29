@@ -14,7 +14,7 @@ export type Credentials = {
     uri: string
 } & KaggleCredentials
 
-enum KaggleCredentialsState {
+enum CredentialsState {
     WrongFormat,
     InvalidCredentials,
     ShowNothing,
@@ -26,26 +26,26 @@ export function LoginPage({ login }: { login: (credentials: Credentials, remembe
     const [rememberMe, setRememberMe] = useState(false)
     const [consent, setConsent] = useState(false)
     const [uri, setUri] = useState("https://bp2020.ukp.informatik.tu-darmstadt.de:1337/graphql")
-    const [state, setState] = React.useState(KaggleCredentialsState.ShowNothing)
+    const [state, setState] = React.useState(CredentialsState.ShowNothing)
 
     const onDrop = useCallback(
         (acceptedFiles) => {
             if (!consent) {
-                setState(KaggleCredentialsState.MissingConsent)
+                setState(CredentialsState.MissingConsent)
                 toast.error("please consent first")
                 return
             }
             acceptedFiles.forEach((file: any) => {
                 const reader = new FileReader()
                 reader.onload = async (e) => {
-                    setState(KaggleCredentialsState.Loading)
+                    setState(CredentialsState.Loading)
 
                     try {
                         const credentials: KaggleCredentials = JSON.parse(e.target?.result as string)
 
                         login({ ...credentials, uri }, rememberMe)
                     } catch (error) {
-                        setState(KaggleCredentialsState.WrongFormat)
+                        setState(CredentialsState.WrongFormat)
                         toast.error("wrong formatted login token")
                     }
                 }
@@ -59,21 +59,21 @@ export function LoginPage({ login }: { login: (credentials: Credentials, remembe
 
     const StatusMessage = useMemo(() => {
         switch (state) {
-            case KaggleCredentialsState.ShowNothing:
+            case CredentialsState.ShowNothing:
                 return null
-            case KaggleCredentialsState.WrongFormat:
+            case CredentialsState.WrongFormat:
                 return (
                     <p style={{ pointerEvents: "none", color: "#d6331a", fontSize: "1.6rem" }}>
                         Your file was corrupted. Please try again :)
                     </p>
                 )
-            case KaggleCredentialsState.Loading:
+            case CredentialsState.Loading:
                 return (
                     <div className="p-3 d-flex justify-content-center">
                         <LoadingComponent>Logging in ...</LoadingComponent>
                     </div>
                 )
-            case KaggleCredentialsState.MissingConsent:
+            case CredentialsState.MissingConsent:
                 return <div>Missing Consent</div>
         }
     }, [state])
@@ -99,13 +99,13 @@ export function LoginPage({ login }: { login: (credentials: Credentials, remembe
                 <Form.Group>
                     <input className="form-control" type="text" value={uri} onChange={(e) => setUri(e.target.value)} />
                 </Form.Group>
-                <h2>Upload kaggle.json to Sign In</h2>
+                <h2>Upload JSON to Sign In</h2>
                 <Row className="mt-3">
                     <Col className="d-flex justify-content-center">
                         <Form.Group id="formGridCheckbox">
                             <Form.Check
                                 type="checkbox"
-                                label="I consent that the provided token is used by our service to communicate with Kaggle."
+                                label="I consent that the provided token may be used by our service to communicate with Kaggle."
                                 onChange={(e) => setConsent((e.target as any).checked)}
                             />
                             We do not store any of your data.
@@ -117,7 +117,7 @@ export function LoginPage({ login }: { login: (credentials: Credentials, remembe
                     style={{ cursor: "pointer" }}
                     {...getRootProps()}>
                     <input {...getInputProps()} />
-                    <h3 className="m-0 text-white text-center">Upload kaggle.json here.</h3>
+                    <h3 className="m-0 text-white text-center">Upload JSON here.</h3>
                     {StatusMessage}
                 </div>
                 <Row>

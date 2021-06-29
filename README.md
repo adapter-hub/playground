@@ -10,8 +10,8 @@ Visit **https://adapter-hub.github.io/playground** to get started with the AH Pl
 
 ![](architecture_v3_latex.svg)
 
--   **Frontend** - Interface to the User: provides a visual interface for creating/editing/deleting of projects and creating/deleting their tasks
--   **Backend** - Provides the BackendAPI for the frontend to maintain projects and tasks. The projects and tasks are stored in the SQL Database. The backend also generates the code based on the provided task configuration from the frontend. The code execution is either done using the KaggleAPI on Kaggle or locally on the machine.
+-   **Frontend** - Interface to the User: provides a visual interface for creating/editing/deleting of projects and creating/deleting their actions
+-   **Backend** - Provides the BackendAPI for the frontend to maintain projects and actions. The projects and actions are stored in the SQL Database. The backend also generates the code based on the provided action configuration from the frontend. The code execution is either done using the KaggleAPI on Kaggle or locally on the machine.
 -   **Google Sheets** - Provides the data in form of a table: input for prediction and gold labels for training.
 -   **Kaggle (optional)** - Provides the KaggleAPI and enables remote python code execution on foreign computation resources provided by Kaggle.
 
@@ -30,3 +30,12 @@ To run this docker instance execute the following commands:
 docker build https://raw.githubusercontent.com/Adapter-Hub/playground/backend/Dockerfile -t ah_playground
 docker run -d -p 4000:4000 ah_playground
 ```
+
+Contact person: [Tilman Beck](mailto:beck@ukp.informatik.tu-darmstadt.de)
+
+https://www.ukp.tu-darmstadt.de/
+
+
+Don't hesitate to send us an e-mail or report an issue, if something is broken (and it shouldn't be) or if you have further questions.
+
+> This repository contains experimental software and is published for the sole purpose of giving additional background details on the respective publication.

@@ -54,9 +54,9 @@ export default function ProjectPage({ match }: RouteChildrenProps<{ id: string }
             </div>
             <div className="mb-3">
                 <div className="btn btn-secondary btn-lg" onClick={() => setShowModal(true)}>
-                    <i className="fas fa-plus"></i> Create Task
+                    <i className="fas fa-plus"></i> Create Action
                 </div>
-                <h1>Tasks</h1>
+                <h1>Actions</h1>
                 <div className="container row">
                     {data.getProject.tasks.map((task) => (
                         <TaskComponent

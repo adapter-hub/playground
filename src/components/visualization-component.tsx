@@ -198,7 +198,7 @@ export function VisualizationResultPage({
     const visibleClassesOptions = useMemo(
         () =>
             listOfAllLabelNames
-                //TODO: testing via include is bad practise since one task name could include another task name (in general the data preparation should be redone and the combined classes should not be concatenated)
+                //TODO: testing via include is bad practise since one action name could include another action name (in general the data preparation should be redone and the combined classes should not be concatenated)
                 .filter((label) => groupedBy == null || !label.includes(groupedBy))
                 .sort((a, b) => (a.length > b.length ? 1 : -1))
                 .map((name) => {

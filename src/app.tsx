@@ -13,6 +13,7 @@ import { LoadingComponent } from "./components/loading-component"
 import { createUploadLink } from "apollo-upload-client"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { InfoComponent } from "./components/info-component"
 
 function saveCredentials({ username, key, uri }: Credentials, rememberMe: boolean) {
     if (rememberMe) {
@@ -100,8 +101,8 @@ export function App({
         <div className="overflow-hidden">
             <ToastContainer />
             <div className="w-100 bg-secondary p-2 justify-content-end d-flex px-3 align-items-center">
-                <span className="text-light">Beta Version</span>
-                <i className="ml-2 text-light fa fa-info-circle"></i>
+                <span className="text-light">Alpha Version</span>
+                <InfoComponent placement="left" color="white" text="The AdapterHub Playground is a research project and not intended for usage as a free web hosting service to run your online business, e-commerce site, or any other website that is primarily directed at either facilitating commercial transactions or providing commercial software as a service (SaaS)." />
             </div>
             <Router>
                 <Switch>

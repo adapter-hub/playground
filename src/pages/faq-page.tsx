@@ -17,9 +17,9 @@ const DataQandA: QuestionAnswer[] = [
             "AdapterHub is a framework simplifying the integration, training and usage of adapter modules for Transformer-based language models.",
     },
     {
-        question: "Why do I need to create a kaggle account?",
+        question: "Do I need to create a kaggle account?",
         answerTop:
-            "Processing several hundred thousand text inputs via the adapterhub library can quickly overwhelm the computing power of a standard web server. To prevent any form of performance degradation, we decided to move all of the calculation to kaggle, where users can compute on their very own workbench. Creating your own kaggle account allows you to store and maintain your projects by yourself, independent of other users that use our site.",
+            "The Playground's backend can do the computation on it's own resources, without a kaggle account. If this option is not available for you, the other option is to use kaggle's computation power, where users can compute on their very own workbench. Creating your own kaggle account allows you to store and maintain your projects by yourself, independent of other users that use our site.",
     },
     {
         question: "How to format the 'date' field?",
@@ -30,12 +30,12 @@ const DataQandA: QuestionAnswer[] = [
     {
         question: "Some computations are loading endlessly. What to do?",
         answerTop:
-            "If to many requests where issued to kaggle, kaggle will deny requests for a certain time window. Try reloading the page or close the page and wait a short time so kaggle stops blocking your requests.",
+            "If you use kaggle and to many requests where issued, kaggle will deny requests for a certain time window. Try reloading the page or close the page and wait a short time so kaggle stops blocking your requests.",
     },
     {
         question: "How do I train Adapters?",
         answerTop:
-            "When adding a task to a project you can select 'training' as task type. Training requires the 'gold_label' column to be filled with correct labels (e.g. 'positive'/'negative' for sentiment analysis).",
+            "When adding a action to a project you can select 'training' as action type. Training requires the 'gold_label' column to be filled with correct labels (e.g. 'positive'/'negative' for sentiment analysis).",
     },
     {
         question: "How do I need to format my google sheet for sentiment analysis?",

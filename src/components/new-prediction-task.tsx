@@ -30,7 +30,7 @@ export function NewPredictionTask({
 
     const [addPredictionTaskMutation, { error, loading }] = useAddPredictionTaskMutation({
         onCompleted: (task) => {
-            toast.success(`training task ${task.addPredictionTask.name} successfully created`)
+            toast.success(`training action ${task.addPredictionTask.name} successfully created`)
             closeModal()
         },
         refetchQueries: [{ query: GetProjectDocument, variables: { id: projectId } }],

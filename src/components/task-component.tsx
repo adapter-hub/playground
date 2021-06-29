@@ -111,7 +111,7 @@ export function TaskComponent({
                             onClick={(e) => {
                                 e.stopPropagation()
                                 deleteTaskMutation({ variables: { id: taskId } }).then(() =>
-                                    toast.success(`task ${data?.getTask.name ?? ""} successfully deleted`)
+                                    toast.success(`action ${data?.getTask.name ?? ""} successfully deleted`)
                                 )
                             }}>
                             <i className="fa fa-trash" />

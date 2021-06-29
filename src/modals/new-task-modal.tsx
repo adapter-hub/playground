@@ -32,12 +32,12 @@ export default function NewTaskModal({
 
     return (
         <Modal show={show} onHide={() => closeModal()}>
-            <Modal.Header>Create Task</Modal.Header>
+            <Modal.Header>Create Action</Modal.Header>
             <Modal.Body>
                 <Form.Group>
                     <Form.Label>
                         Name
-                        <InfoComponent text="The name of the task." />
+                        <InfoComponent text="The name of the action." />
                     </Form.Label>
                     <input
                         className="form-control"
@@ -48,7 +48,7 @@ export default function NewTaskModal({
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Task Type</Form.Label>
+                    <Form.Label>Action Type</Form.Label>
                     <Form.Control
                         onChange={(event) => setTaskType(event.currentTarget.value as TaskType)}
                         as="select"
