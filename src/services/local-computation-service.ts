@@ -24,6 +24,9 @@ export class LocalComputationService implements ComputationService {
         if (credentials.username === "admin" && credentials.key === "admin") {
             return { type: "local", username: credentials.username }
         }
+        if(credentials.username === "reviewer" && credentials.key === "umhB8n95cTXVFEIBGNTi") {
+            return { type: "local", username: credentials.username }
+        }
         return undefined
     }
 
