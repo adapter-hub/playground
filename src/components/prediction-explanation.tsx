@@ -35,8 +35,7 @@ export function PredictionExplanation() {
                 The heading for new jobs is inserted automatically and does not need to be inserted by you.
             </p>
             <p>
-                4. If your data has further properties, you can add them in further columns in the document (e.g.
-                "male", "female"). Of course, these have no influence on the result of the prediction, but can be useful
+                4. If your data has further properties, you can add them in further columns in the document (e.g. clustering or timestamps). Of course, these have no influence on the result of the prediction, but can be useful
                 for the later visualization we provide.
             </p>
             <p>

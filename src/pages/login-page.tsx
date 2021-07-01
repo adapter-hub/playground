@@ -101,14 +101,26 @@ export function LoginPage({ login }: { login: (credentials: Credentials, remembe
                 </Form.Group>
                 <h2>Upload JSON to Sign In</h2>
                 <Row className="mt-3">
-                    <Col className="d-flex justify-content-center">
+                    <Col className="d-flex">
+                        <Form.Group id="formGridCheckbox">
+                            <Form.Check
+                                required
+                                type="checkbox"
+                                label="* (required) I consent that the provided token may be used by our service to communicate with Kaggle."
+                                onChange={(e) => setConsent((e.target as any).checked)}
+                            />
+                            <small>We do not store any of your data.</small>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="d-flex">
                         <Form.Group id="formGridCheckbox">
                             <Form.Check
                                 type="checkbox"
-                                label="I consent that the provided token may be used by our service to communicate with Kaggle."
-                                onChange={(e) => setConsent((e.target as any).checked)}
+                                label="Keep me logged in."
+                                onChange={(e) => setRememberMe((e.target as any).checked)}
                             />
-                            We do not store any of your data.
                         </Form.Group>
                     </Col>
                 </Row>
@@ -120,26 +132,15 @@ export function LoginPage({ login }: { login: (credentials: Credentials, remembe
                     <h3 className="m-0 text-white text-center">Upload JSON here.</h3>
                     {StatusMessage}
                 </div>
-                <Row>
-                    <Col className="d-flex justify-content-center">
-                        <Form.Group id="formGridCheckbox">
-                            <Form.Check
-                                type="checkbox"
-                                label="Keep me logged in."
-                                onChange={(e) => setRememberMe((e.target as any).checked)}
-                            />
-                        </Form.Group>
-                    </Col>
-                </Row>
             </div>
-            <div className="mb-5 container-sm d-flex flex-column align-items-center">
-                <h3 className="mb-5" style={{ color: "#3096a6" }}>
-                    New to this? Watch the tutorial below.
+            <div className="my-5 container-sm d-flex flex-column align-items-center">
+                <h3 className="mb-3" style={{ color: "#3096a6" }}>
+                    System Demonstration
                     <i className="fas fa-info-circle" style={{ fontSize: "0.7em", marginLeft: "8px" }}></i>
                 </h3>
                 <div className="video_wrapper w-100">
                     <iframe
-                        src="https://www.youtube.com/embed/pnNwPqyGfX0"
+                        src="https://www.youtube.com/embed/RvGviBe4N5Q"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen></iframe>

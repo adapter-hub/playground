@@ -8,6 +8,7 @@ import {
     DefaultAdapterhubAdapterConfig,
 } from "./adapterhub-adapter-config"
 import { toast } from "react-toastify"
+import { TrainingExplanation } from "./training-explanation"
 
 const epochOptions = new Array(20).fill(null).map((_, index) => ({ value: index + 1, label: `${index + 1} Epoche(n)` }))
 
@@ -25,7 +26,7 @@ export function NewTrainingTask({
     closeModal: () => void
 }) {
     const [expertMode, setExportMode] = useState<boolean>(false)
-
+    const [showExplanation, setShowExplanation] = useState(false)
     const [adapterhubAdapterConfig, setAdapterhubAdapterConfig] =
         useState<AdapterhubAdapterConfig>(DefaultAdapterhubAdapterConfig)
 
@@ -92,6 +93,12 @@ export function NewTrainingTask({
                 config={adapterhubAdapterConfig}
                 setConfig={setAdapterhubAdapterConfig}
             />
+
+            <button className="btn btn-outline-primary mb-3" onClick={() => setShowExplanation(!showExplanation)}>
+                {showExplanation ? "Hide Example" : "Show Example"}
+            </button>
+
+            {showExplanation && <TrainingExplanation />}
 
             {error && <p className="text-danger">{JSON.stringify(error)}</p>}
             <Button
