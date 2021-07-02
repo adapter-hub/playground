@@ -38,9 +38,9 @@ export function Toolbar({ logout }: { logout?: () => void }) {
                             </Link>
                             <a
                                 className="nav-item nav-secondary my-1 d-md-inline-block Toolbar-TutorialButton btn btn-sm btn-outline-light"
-                                href="https://youtu.be/pnNwPqyGfX0"
+                                href="https://youtu.be/RvGviBe4N5Q"
                                 target="_blank">
-                                Tutorial <i className="fab fa-youtube fa-lg"></i>&nbsp;
+                                Demonstration <i className="fab fa-youtube fa-lg"></i>&nbsp;
                             </a>
                             <li className="nav-item nav-secondary justify-content-end d-md-inline-block">
                                 <a
