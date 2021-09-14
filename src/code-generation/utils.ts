@@ -93,8 +93,8 @@ const transDicAndGoldLabelTranslationList: string[][] = [
 //a list of lists for the different transDic and GoldLabelTranslation
 const transDicAndGoldLabelTranslationResultList: string[][] = [
     [
-        `"LABEL_1":"positive", "LABEL_0":"negative"`,
-        `{"positive": 1, "negative" : 0, "LABEL_1" : 1, "LABEL_0" : 0, "0" : 0, "1" : 1}`,
+        `"entailment":"entailment", "not_entailment":"not_entailment", "LABEL_1":"positive", "LABEL_0":"negative"`,
+        `{"entailment": 1, "not_entailment": 0, "positive": 1, "negative" : 0, "LABEL_1" : 1, "LABEL_0" : 0, "0" : 0, "1" : 1}`,
     ],
     [
         `"LABEL_1":"equivalent", "LABEL_0":"inequivalent","not_equivalent":"inequivalent","equivalent":"equivalent"`,
