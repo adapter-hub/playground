@@ -38,6 +38,12 @@ export function Toolbar({ logout }: { logout?: () => void }) {
                             </Link>
                             <a
                                 className="nav-item nav-secondary my-1 d-md-inline-block Toolbar-TutorialButton btn btn-sm btn-outline-light"
+                                href="https://arxiv.org/abs/2108.08103"
+                                target="_blank">
+                                Paper <i className="fa fa-scroll"></i>&nbsp;
+                            </a>
+                            <a
+                                className="nav-item nav-secondary my-1 d-md-inline-block Toolbar-TutorialButton btn btn-sm btn-outline-light"
                                 href="https://youtu.be/RvGviBe4N5Q"
                                 target="_blank">
                                 Demonstration <i className="fab fa-youtube fa-lg"></i>&nbsp;
