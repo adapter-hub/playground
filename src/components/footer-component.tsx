@@ -5,7 +5,7 @@ export function FooterComponent() {
             <footer style={{ position: "absolute", bottom: "0", width: "100%" }}>
                 <div className="container">
                     <p className="float-md-right text-center text-md-right">
-                        <a href="https://arxiv.org/abs/2007.07779" target="_blank">
+                        <a href="https://arxiv.org/abs/2108.08103" target="_blank">
                             Paper
                         </a>
                         <span className="text-black-30 px-1"> | </span>

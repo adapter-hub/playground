@@ -6,6 +6,7 @@ Using the newest Natural Language Processing tools made easy with the AdapterHub
 
 Visit **https://adapter-hub.github.io/playground** to get started with the AH Playground.
 
+
 ## Architecture
 
 ![](architecture_v3_latex.svg)
@@ -39,3 +40,18 @@ https://www.ukp.tu-darmstadt.de/
 Don't hesitate to send us an e-mail or report an issue, if something is broken (and it shouldn't be) or if you have further questions.
 
 > This repository contains experimental software and is published for the sole purpose of giving additional background details on the respective publication.
+
+## Citation
+
+Our paper: [AdapterHub: A Framework for Adapting Transformers](https://arxiv.org/abs/2007.07779)
+
+```
+@misc{beck2021adapterhub,
+      title={AdapterHub Playground: Simple and Flexible Few-Shot Learning with Adapters}, 
+      author={Tilman Beck and Bela Bohlender and Christina Viehmann and Vincent Hane and Yanik Adamson and Jaber Khuri and Jonas Brossmann and Jonas Pfeiffer and Iryna Gurevych},
+      year={2021},
+      eprint={2108.08103},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
