@@ -18,7 +18,7 @@ export function genInstallAH(platformType: PlatformType): string {
     if (platformType === "kaggle") {
         return `
 #------------------------------------------------------------PART 2------------------------------------------------------------
-os.system('pip install git+https://github.com/adapter-hub/adapter-transformers.git@develop')`
+os.system('pip install git+https://github.com/adapter-hub/adapter-transformers.git')`
     }
     return ""
 }
@@ -91,7 +91,7 @@ adapter_name = model.load_adapter("${adapterId}","${adapterArchitecture}")`
 export function genPipeline(pipeline: string): string {
     return `
 # for classification the huggingface pipeline construct is used
-pipeline = ${pipeline}(model=model,tokenizer=tokenizer)`//for gpu usage: , device=0
+pipeline = ${pipeline}(model=model,tokenizer=tokenizer,device=0)`
 }
 
 export function genCreateLabelTranslationDic(transDic: string): string {

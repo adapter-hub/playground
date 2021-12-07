@@ -107,7 +107,7 @@ export class KaggleComputationService implements ComputationService {
         }
         const kernelPushRequest = new KaggleKernelPushRequest(user.username, task.kernelId, code, "python", "script")
         kernelPushRequest.setIsPrivate(true)
-        kernelPushRequest.setEnableGpu(false) //for gpu usage: true
+        kernelPushRequest.setEnableGpu(true)
         kernelPushRequest.setEnableInternet(true)
         kernelPushRequest.setDockerImagePinningType("original")
 

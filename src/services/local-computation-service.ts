@@ -84,13 +84,13 @@ export class LocalComputationService implements ComputationService {
         await mkdir(path)
         await repo.save(task)
         let output = ""
-        output += PythonShell.getVersionSync("python3")
+        output += PythonShell.getVersionSync("python")
         const codePath = join(path, "code.py")
         await writeFile(codePath, code)
         PythonShell.run(
             codePath,
             {
-                pythonPath: "python3",
+                pythonPath: "python",
                 cwd: path,
             },
             (error) => {
