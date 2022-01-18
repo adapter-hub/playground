@@ -112,55 +112,50 @@ function getDefaultAdapterhubAdapterConfigFromNLPTaskType(taskType: NLPTaskType)
 }
 
 function getLabelMappingInfo(config: AdapterhubAdapterConfig): string {
-    let mapping!: string[]
+    let mappingInfo!: string
     if (config.ownAdapter) {
-        mapping = ["No information available for uploaded adapter."]
+        mappingInfo = "No information available for uploaded adapter."
     }
     else if (config.nlpTaskType.task === 'lingaccept') {
         if (config.nlpDataset.dataset ==='cola') {
-            mapping = ['acceptable: 1', 'unacceptable: 0']
+            mappingInfo = 'acceptable: 1, unacceptable: 0'
         }
     }
     else if (config.nlpTaskType.task === 'sentiment') {
         if (['sst-2', 'imdb', 'rotten_tomatoes'].some(x => x === config.nlpDataset.dataset)) {
-            mapping = ['positive: 1', 'negative: 0']
+            mappingInfo = 'positive: 1, negative: 0'
         }
     }
     else if (config.nlpTaskType.task === 'nli') {
         if (config.nlpDataset.dataset === 'multinli') {
-            mapping = ["contradiction: 0", "entailment: 1", "neutral: 2"]
+            mappingInfo = "contradiction: 0, entailment: 1, neutral: 2"
         }
         if (config.nlpDataset.dataset === 'qnli') {
-            mapping = ["entailment: 0", "not_entailment: 1"]
+            mappingInfo = "entailment: 0, not_entailment: 1"
         }
         if (config.nlpDataset.dataset === 'rte') {
-            mapping = ["entailment: 0", "not_entailment: 1"]
+            mappingInfo = "entailment: 0, not_entailment: 1"
         }
         if (config.nlpDataset.dataset=== 'cb') {
-            mapping = ["entailment: 0", "contradiction: 1", "neutral: 2"]
+            mappingInfo = "entailment: 0, contradiction: 1, neutral: 2"
         }
     }
     else if (config.nlpTaskType.task=== 'sts') {
         if (config.nlpDataset.dataset === 'mrpc') {
-            mapping = ["equivalent: 0", "not_equivalent: 1"]
+            mappingInfo = "equivalent: 0, not_equivalent: 1"
         }
         if (config.nlpDataset.dataset=== 'qqp') {
-            mapping = ["not_duplicate: 0", "duplicate: 1"]
+            mappingInfo = "not_duplicate: 0, duplicate: 1"
         }
         if (config.nlpDataset.dataset ==='sts-b') {
-            mapping = ["score between 0.0 (least similar) and 5.0 (most similar)"]
+            mappingInfo = "score between 0.0 (least similar) and 5.0 (most similar)"
         }
     }
     else {
-        mapping = ["There is no information yet about the label mapping for this adapter. Please refer to the respective page on Adapterhub.ml for more information."]
+        mappingInfo = "There is no information yet about the label mapping for this adapter. Please refer to the respective page on Adapterhub.ml for more information."
     }
 
-    let mappingInfo = ""
-    for (var valu of mapping) {
-        mappingInfo = mappingInfo + valu + " "
-    }
     return mappingInfo
-
 
 }
 
