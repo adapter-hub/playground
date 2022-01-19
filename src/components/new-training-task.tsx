@@ -9,6 +9,7 @@ import {
 } from "./adapterhub-adapter-config"
 import { toast } from "react-toastify"
 import { TrainingExplanation } from "./training-explanation"
+import { InfoComponent } from "./info-component"
 
 const epochOptions = new Array(20).fill(null).map((_, index) => ({ value: index + 1, label: `${index + 1} Epoche(n)` }))
 
@@ -55,7 +56,10 @@ export function NewTrainingTask({
                 />
             </Form.Group>
             <Form.Group className="mb-2">
-                <Form.Label>Epochs</Form.Label>
+                <Form.Label>
+                    Epochs
+                    <InfoComponent text="an Epoch can be described as one complete cycle through the entire training dataset. The number indicates the number of passes that the machine learning algorithm has completed during training." />
+                </Form.Label>
                 <Form.Control
                     as="select"
                     custom
@@ -71,7 +75,10 @@ export function NewTrainingTask({
                 </Form.Control>
             </Form.Group>
             <Form.Group className="mb-2">
-                <Form.Label>Learning Rate</Form.Label>
+                <Form.Label>
+                    Learning Rate
+                    <InfoComponent text="Rate of learning or speed at which the model learns. It regulates the amount of allocated error with which the model’s weights are updated. Smaller learning rates necessitate more training epochs because of the fewer changes. On the other hand, larger learning rates result in faster changes. A desirable learning rate is low enough for the network to converge on something useful while yet being high enough to train in a reasonable length of time." />
+                </Form.Label>
                 <Form.Control
                     as="select"
                     custom

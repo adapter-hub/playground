@@ -33,6 +33,12 @@ export function Toolbar({ logout }: { logout?: () => void }) {
                             <Link
                                 className="nav-item nav-secondary my-1 d-md-inline-block Toolbar-TutorialButton btn btn-sm btn-outline-light"
                                 target="_blank"
+                                to="/tasks">
+                                Tasks <i className="fa fa-check-circle" aria-hidden="true"></i>
+                            </Link>
+                            <Link
+                                className="nav-item nav-secondary my-1 d-md-inline-block Toolbar-TutorialButton btn btn-sm btn-outline-light"
+                                target="_blank"
                                 to="/faq">
                                 Faq <i className="fa fa-question-circle" aria-hidden="true"></i>
                             </Link>

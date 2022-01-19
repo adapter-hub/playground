@@ -81,7 +81,7 @@ export function Faqpage() {
                     )
                 })}
                 <h5>
-                    If you encounter some errors or need additional help please use write create a Issue at{" "}
+                    If you encounter some errors or need additional help, please create an issue at{" "} 
                     <a href="https://github.com/Adapter-Hub/playground">the github repo.</a>
                 </h5>
             </div>

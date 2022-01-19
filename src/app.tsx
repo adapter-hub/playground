@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } f
 import { Toolbar } from "./components/toolbar"
 import { FooterComponent } from "./components/footer-component"
 import { Faqpage } from "./pages/faq-page"
+import { Taskspage } from "./pages/tasks-page"
 import "./custom.scss"
 import { HashRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 import { ProjectListPage } from "./pages/project-list-page"
@@ -123,6 +124,10 @@ export function App({
                     <Route path="/faq">
                         <Toolbar />
                         <Faqpage />
+                    </Route>
+                    <Route path="/tasks">
+                        <Toolbar />
+                        <Taskspage />
                     </Route>
                     <Route path="">
                         <Redirect to="/projects" />

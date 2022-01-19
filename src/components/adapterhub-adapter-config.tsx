@@ -3,6 +3,7 @@ import { Form } from "react-bootstrap"
 import { AdapterInputzone } from "./adapter-inputzone"
 import { findFirstOrDefault } from "../toolbox"
 import Tasks from "../AdapterHub.json"
+import { InfoComponent } from "./info-component"
 
 export type NLPTaskType = {
     name: string
@@ -110,6 +111,54 @@ function getDefaultAdapterhubAdapterConfigFromNLPTaskType(taskType: NLPTaskType)
     }
 }
 
+function getLabelMappingInfo(config: AdapterhubAdapterConfig): string {
+    let mappingInfo!: string
+    if (config.ownAdapter) {
+        mappingInfo = "No information available for uploaded adapter."
+    }
+    else if (config.nlpTaskType.task === 'lingaccept') {
+        if (config.nlpDataset.dataset ==='cola') {
+            mappingInfo = 'acceptable: 1, unacceptable: 0'
+        }
+    }
+    else if (config.nlpTaskType.task === 'sentiment') {
+        if (['sst-2', 'imdb', 'rotten_tomatoes'].some(x => x === config.nlpDataset.dataset)) {
+            mappingInfo = 'positive: 1, negative: 0'
+        }
+    }
+    else if (config.nlpTaskType.task === 'nli') {
+        if (config.nlpDataset.dataset === 'multinli') {
+            mappingInfo = "contradiction: 0, entailment: 1, neutral: 2"
+        }
+        if (config.nlpDataset.dataset === 'qnli') {
+            mappingInfo = "entailment: 0, not_entailment: 1"
+        }
+        if (config.nlpDataset.dataset === 'rte') {
+            mappingInfo = "entailment: 0, not_entailment: 1"
+        }
+        if (config.nlpDataset.dataset=== 'cb') {
+            mappingInfo = "entailment: 0, contradiction: 1, neutral: 2"
+        }
+    }
+    else if (config.nlpTaskType.task=== 'sts') {
+        if (config.nlpDataset.dataset === 'mrpc') {
+            mappingInfo = "equivalent: 0, not_equivalent: 1"
+        }
+        if (config.nlpDataset.dataset=== 'qqp') {
+            mappingInfo = "not_duplicate: 0, duplicate: 1"
+        }
+        if (config.nlpDataset.dataset ==='sts-b') {
+            mappingInfo = "score between 0.0 (least similar) and 5.0 (most similar)"
+        }
+    }
+    else {
+        mappingInfo = "There is no information yet about the label mapping for this adapter. Please refer to the respective page on Adapterhub.ml for more information."
+    }
+
+    return mappingInfo
+
+}
+
 export function AdapterhubAdapterConfig({
     config,
     setConfig,
@@ -121,6 +170,9 @@ export function AdapterhubAdapterConfig({
     expertMode: boolean
     training: boolean
 }) {
+    //const [expertMode, setExportMode] = useState<boolean>(false)
+    //const updateLabelMatchingBox = useCallback()
+
     const setNLPTaskType = useCallback(
         (taskType: NLPTaskType) => {
             setConfig(getDefaultAdapterhubAdapterConfigFromNLPTaskType(taskType))
@@ -159,7 +211,17 @@ export function AdapterhubAdapterConfig({
         <>
             <Form>
                 <Form.Group>
-                    <Form.Label>{training ? "Training" : "Prediction"} Task Type</Form.Label>
+                    {training ? 
+                        <Form.Label> 
+                            Training Task Type
+                            <InfoComponent text="The text classification task which was used to train the pretrained adapter and will be used for this training Action. See the 'Tasks' page for a list of supported tasks with more information." />
+                        </Form.Label>
+                            :   
+                        <Form.Label> 
+                            Prediction Task Type
+                            <InfoComponent text="The text classification task which was used to train the pretrained adapter. See the 'Tasks' page for a list of supported tasks with more information." />
+                        </Form.Label>
+                    }
                     <Form.Control
                         onChange={(event) =>
                             setNLPTaskType(findFirstOrDefault(Tasks, (t) => t.name === event.currentTarget.value))
@@ -173,6 +235,10 @@ export function AdapterhubAdapterConfig({
                     </Form.Control>
                 </Form.Group>
             </Form>
+            <div key="labelMapping" className="bg-light p-3 rounded">
+                {getLabelMappingInfo(config)}
+            </div>    
+            
             {expertMode && [
                 <ul key="ul" className="nav nav-tabs mb-3">
                     <li className="nav-item">
