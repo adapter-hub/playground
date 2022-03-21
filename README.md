@@ -4,7 +4,7 @@ Using the newest Natural Language Processing tools made easy with the AdapterHub
 
 **Predict, Train and Cluster** your data without any coding knowledge based on the latest models provided by [AdapterHub](https://adapterhub.ml/).
 
-Visit **https://adapter-hub.github.io/playground** to get started with the AH Playground.
+Visit our live demo at **https://adapter-hub.github.io/playground** to get started with the AH Playground.
 
 
 ## Architecture
