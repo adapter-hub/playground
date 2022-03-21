@@ -43,7 +43,7 @@ Don't hesitate to send us an e-mail or report an issue, if something is broken (
 
 ## Citation
 
-Our paper: [AdapterHub: A Framework for Adapting Transformers](https://arxiv.org/abs/2007.07779)
+Our paper: [AdapterHub Playground: Simple and Flexible Few-Shot Learning with Adapters](https://arxiv.org/abs/2108.08103)
 
 ```
 @misc{beck2021adapterhub,
