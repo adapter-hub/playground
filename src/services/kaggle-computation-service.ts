@@ -116,7 +116,7 @@ export class KaggleComputationService implements ComputationService {
         }
 
         const { error } = await KaggleApi.kernelPush(user, kernelPushRequest)
-        if (error != null) {
+        if (error != null && error != "Maximum batch GPU session count of 2 reached.") {
             throw error
         }
     }
