@@ -25,7 +25,7 @@ enum CredentialsState {
 export function LoginPage({ login }: { login: (credentials: Credentials, rememberMe: boolean) => void }) {
     const [rememberMe, setRememberMe] = useState(false)
     const [consent, setConsent] = useState(false)
-    const [uri, setUri] = useState("https://bp2020.ukp.informatik.tu-darmstadt.de:1337/graphql")
+    const [uri, setUri] = useState("https://bp2020.ukp.informatik.tu-darmstadt.de/graphql")
     const [state, setState] = React.useState(CredentialsState.ShowNothing)
 
     const onDrop = useCallback(
