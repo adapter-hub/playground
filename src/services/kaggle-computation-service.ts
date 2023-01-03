@@ -116,7 +116,7 @@ export class KaggleComputationService implements ComputationService {
         }
 
         const { error } = await KaggleApi.kernelPush(user, kernelPushRequest)
-        if (error != null) {
+        if (error != null && error.length > 0) {
             throw error
         }
     }
