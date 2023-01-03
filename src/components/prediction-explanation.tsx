@@ -1,13 +1,21 @@
 import React from "react"
-import { toAbsoluteStaticFilePath } from "../toolbox"
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 
 export function PredictionExplanation() {
     return (
         <div>
-            <h5>Example for „sentiment prediction</h5>
-            <div className="d-flex flex-row p-5">
-                <img className="mr-5" style={{ minWidth: 0 }} src="images/input.png" />
-                <img style={{ minWidth: 0 }} src="images/with_output.png" />
+            <h5>Example for "sentiment prediction"</h5>
+            <div className="d-flex flex-row">
+                <TransformWrapper>
+                    <TransformComponent wrapperClass="mr-3">
+                        <img height={200} style={{ minWidth: 0 }} src="images/input.png" />
+                    </TransformComponent>
+                </TransformWrapper>
+                <TransformWrapper>
+                    <TransformComponent>
+                        <img height={200} style={{ minWidth: 0 }} src="images/with_output.png" />
+                    </TransformComponent>
+                </TransformWrapper>
             </div>
             <p>
                 The left image shows the Google Sheets document before prediction. Each cell in the "Input1" column is a
@@ -15,9 +23,9 @@ export function PredictionExplanation() {
                 and can be left empty.
             </p>
             <p>
-                The right image shows the Google Sheets document after the prediction. The name of the column is the name
-                of the job you created (see below). In the column you can see the results for the specific pieces of
-                text in Input1.
+                The right image shows the Google Sheets document after the prediction. The name of the column is the
+                name of the job you created (see below). In the column you can see the results for the specific pieces
+                of text in Input1.
             </p>
             <p>When formatting your Google Sheet, you must follow the rules below:</p>
             <p>Rules:</p>
@@ -35,8 +43,9 @@ export function PredictionExplanation() {
                 The heading for new jobs is inserted automatically and does not need to be inserted by you.
             </p>
             <p>
-                4. If your data has further properties, you can add them in further columns in the document (e.g. clustering or timestamps). Of course, these have no influence on the result of the prediction, but can be useful
-                for the later visualization we provide.
+                4. If your data has further properties, you can add them in further columns in the document (e.g.
+                clustering or timestamps). Of course, these have no influence on the result of the prediction, but can
+                be useful for the later visualization we provide.
             </p>
             <p>
                 5. Your data may contain time data, which is very useful for later visualization. If so, please make
