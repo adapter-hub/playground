@@ -31,7 +31,7 @@ export class KaggleComputationService implements ComputationService {
         } catch (error) {
             if (error.response.status === 401) {
                 return undefined
-            } else if (error.response.status === 404) {
+            } else if (error.response.status === 404 || error.response.status === 403) {
                 //kernel "test" does not exist but user is authenticated
                 authenticationCache.set(user.username, new Date().getTime())
                 return user
@@ -116,7 +116,7 @@ export class KaggleComputationService implements ComputationService {
         }
 
         const { error } = await KaggleApi.kernelPush(user, kernelPushRequest)
-        if (error != null) {
+        if (error != null && error.length > 0) {
             throw error
         }
     }
